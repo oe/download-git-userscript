@@ -60,7 +60,7 @@ module.exports = {
           version: version + '.alpha',
           author: 'Saiya',
           description: 'download github directory via one click',
-          match: 'https://github.com/*',
+          match: ['https://github.com/*', 'https://gist.github.com/*'],
           grant: [],
           noframes: true
         }

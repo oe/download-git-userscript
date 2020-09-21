@@ -1,5 +1,34 @@
+import { saveAs } from 'file-saver'
 (function () {
-  main()
+  injectDownload()
+
+  // Select the node that will be observed for mutations
+  let targetNode
+  if (isGist()) {
+    targetNode = document.querySelector('#gist-pjax-container')
+  } else {
+    // to deal with octree, it append elements as siblings of #js-repo-pjax-container 
+    //   which is inside of child of .application-main
+    targetNode = document.querySelector('.application-main')
+    if (targetNode) targetNode = targetNode.firstElementChild
+  }
+  if (!targetNode) return
+
+  // Callback function to execute when mutations are observed
+  const callback = function(mutationsList: MutationRecord[]) {
+    console.log('mutation change', mutationsList)
+    injectDownload()
+  }
+
+  // Create an observer instance linked to the callback function
+  const observer = new MutationObserver(callback)
+
+  // Start observing the target node for configured mutations
+  observer.observe(targetNode, { childList: true, subtree: false })
+
+  function isGist() {
+    return location.hostname === 'gist.github.com'
+  }
 
   function isRepo() {
     return document.querySelector('.repository-content')
@@ -32,7 +61,11 @@
   }
 
   function createDownloadBtn() {
-    const btn = document.createElement('a')
+    let btn = document.getElementById('xiu-download-btn') as HTMLAnchorElement
+    if (!btn) {
+      btn = document.createElement('a')
+      btn.id = 'xiu-download-btn'
+    }
     btn.className = 'btn ml-2 d-none d-md-block'
     btn.target = '_blank'
     let url = ''
@@ -42,10 +75,15 @@
       url = link.href
     } else if (getRawBtn()) {
       const rawBtn = getRawBtn() as HTMLAnchorElement
-      url = rawBtn.href
-      btn.download = ''
+      url = ''
+      btn.onclick = function (e) {
+        e.preventDefault()
+        console.warn('saveasss', rawBtn.href)
+        saveAs(rawBtn.href, rawBtn.href.split('/').pop())
+      }
+      // btn.download = ''
     } else {
-      url = `http://minhaskamal.github.io/DownGit?url=${encodeURIComponent(getCurrentUrlPath())}`
+      url = `https://minhaskamal.github.io/DownGit/#/home?url=${encodeURIComponent(getCurrentUrlPath())}`
     }
     btn.textContent = 'Download'
     btn.href = url
@@ -57,7 +95,7 @@
     return url.replace(/\/$/, '')
   }
 
-  function main() {
+  function injectDownload() {
     const $fileNavi = getFileNavi()
     if (!isRepo() || !$fileNavi) {
       console.log('not repo')
