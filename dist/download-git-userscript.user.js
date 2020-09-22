@@ -1,11 +1,15 @@
 // ==UserScript==
-// @name        download-git-userscript
-// @version     0.0.1.alpha
+// @name        Download github repo dir
+// @version     0.0.1
 // @author      Saiya
 // @description download github directory via one click
+// @supportURL  https://github.com/oe/download-git-userscript/issues
 // @match       https://github.com/*
 // @match       https://gist.github.com/*
+// @connect     raw.githubusercontent.com
 // @grant       GM_download
+// @grant       GM_xmlhttpRequest
+// @grant       GM_setClipboard
 // @noframes    
 // ==/UserScript==
 
@@ -92,7 +96,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -101,62 +105,160 @@
 
 "use strict";
 
-(function () {
-    injectDownload();
-    // Select the node that will be observed for mutations
-    let targetNode;
-    if (isGist()) {
-        targetNode = document.querySelector('#gist-pjax-container');
-    }
-    else {
-        // to deal with octree, it append elements as siblings of #js-repo-pjax-container 
-        //   which is inside of child of .application-main
-        targetNode = document.querySelector('.application-main');
-        if (targetNode)
-            targetNode = targetNode.firstElementChild;
-    }
-    if (!targetNode)
-        return;
-    // Callback function to execute when mutations are observed
-    const callback = function (mutationsList) {
-        console.log('mutation change', mutationsList);
-        injectDownload();
-    };
-    // Create an observer instance linked to the callback function
-    const observer = new MutationObserver(callback);
-    // Start observing the target node for configured mutations
-    observer.observe(targetNode, { childList: true, subtree: false });
-    function isGist() {
-        return location.hostname === 'gist.github.com';
-    }
-    function isRepo() {
-        return document.querySelector('.repository-content');
-    }
-    function getFileNavi() {
-        let $navi = document.querySelector('.repository-content .file-navigation');
-        if (!$navi) {
-            $navi = document.querySelector('#blob-more-options-details');
-            if ($navi) {
-                $navi = $navi.parentElement;
-            }
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.openLink = exports.getCurrentUrlPath = exports.getRawBtn = exports.getUrlTextResponse = exports.isTextBasedSinglePage = exports.isRepoRootDir = exports.isPrivateRepo = exports.getFileNavi = exports.isRepo = exports.isGist = void 0;
+/**
+ * is gist website
+ */
+function isGist() {
+    return location.hostname === 'gist.github.com';
+}
+exports.isGist = isGist;
+function isRepo() {
+    return document.querySelector('.repository-content');
+}
+exports.isRepo = isRepo;
+function getFileNavi() {
+    let $navi = document.querySelector('.repository-content .file-navigation');
+    if (!$navi) {
+        $navi = document.querySelector('#blob-more-options-details');
+        if ($navi) {
+            $navi = $navi.parentElement;
         }
-        return $navi;
     }
-    function isPrivateRepo() {
-        const label = document.querySelector('#js-repo-pjax-container .hide-full-screen .Label');
-        return label && label.textContent === 'Private';
+    return $navi;
+}
+exports.getFileNavi = getFileNavi;
+function isPrivateRepo() {
+    const label = document.querySelector('#js-repo-pjax-container .hide-full-screen .Label');
+    return label && label.textContent === 'Private';
+}
+exports.isPrivateRepo = isPrivateRepo;
+function isRepoRootDir() {
+    const $fileNavi = getFileNavi();
+    if (!$fileNavi)
+        return false;
+    return !!$fileNavi.querySelector('get-repo');
+}
+exports.isRepoRootDir = isRepoRootDir;
+function isTextBasedSinglePage() {
+    if (!getRawBtn())
+        return;
+    if (document.getElementById('readme'))
+        return true;
+    const boxBody = document.querySelector('table.highlight');
+    if (boxBody)
+        return true;
+    return false;
+}
+exports.isTextBasedSinglePage = isTextBasedSinglePage;
+function getUrlTextResponse(url) {
+    return new Promise((resolve, reject) => {
+        // @ts-ignore
+        GM_xmlhttpRequest({
+            method: 'GET',
+            url,
+            ontimeout: reject,
+            onabort: reject,
+            onerror: reject,
+            onload: (res) => {
+                if (res.responseText) {
+                    resolve(res.responseText);
+                }
+                else {
+                    reject(res);
+                }
+            }
+        });
+    });
+}
+exports.getUrlTextResponse = getUrlTextResponse;
+// if is single file page, then it has a raw btn
+function getRawBtn() {
+    return document.getElementById('raw-url');
+}
+exports.getRawBtn = getRawBtn;
+// remove qeurystring & hash
+function getCurrentUrlPath() {
+    const url = location.origin + location.pathname;
+    return url.replace(/\/$/, '');
+}
+exports.getCurrentUrlPath = getCurrentUrlPath;
+function openLink(url) {
+    const link = document.createElement('a');
+    link.target = '_blank';
+    link.href = url;
+    link.click();
+}
+exports.openLink = openLink;
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const utils = __importStar(__webpack_require__(0));
+const utils_1 = __webpack_require__(0);
+(function () {
+    main();
+    observePageChange();
+    function main() {
+        if (!utils.isRepo())
+            return;
+        addDownloadBtn();
+        addCopyTextBtn();
     }
-    function isRepoRootDir() {
-        const $fileNavi = getFileNavi();
+    function observePageChange() {
+        // Select the node that will be observed for mutations
+        let targetNode;
+        if (utils.isGist()) {
+            targetNode = document.querySelector('#gist-pjax-container');
+        }
+        else {
+            // to deal with octree, it append elements as siblings of #js-repo-pjax-container 
+            //   which is inside of child of .application-main
+            targetNode = document.querySelector('.application-main');
+            if (targetNode)
+                targetNode = targetNode.firstElementChild;
+        }
+        if (!targetNode)
+            return;
+        // Callback function to execute when mutations are observed
+        const callback = function (mutationsList) {
+            console.log('mutation change', mutationsList);
+            main();
+        };
+        // Create an observer instance linked to the callback function
+        const observer = new MutationObserver(callback);
+        // Start observing the target node for configured mutations
+        observer.observe(targetNode, { childList: true, subtree: false });
+    }
+    function addDownloadBtn() {
+        const $fileNavi = utils.getFileNavi();
         if (!$fileNavi)
-            return false;
-        return !!$fileNavi.querySelector('get-repo');
-    }
-    // if is single file page, then it has a raw btn
-    function getRawBtn() {
-        return document.getElementById('raw-url');
-    }
-    function createDownloadBtn() {
+            return;
         let btn = document.getElementById('xiu-download-btn');
         if (!btn) {
             btn = document.createElement('a');
@@ -165,43 +267,59 @@
         btn.className = 'btn ml-2 d-none d-md-block';
         btn.target = '_blank';
         let url = '';
-        if (isRepoRootDir()) {
-            const $fileNavi = getFileNavi();
+        if (utils.isRepoRootDir()) {
             const link = $fileNavi.querySelector('get-repo a[href$=".zip"]');
             url = link.href;
         }
-        else if (getRawBtn()) {
-            const rawBtn = getRawBtn();
-            url = '';
+        else if (utils.getRawBtn()) {
+            const rawBtn = utils.getRawBtn();
+            url = rawBtn.href;
             btn.onclick = function (e) {
                 e.preventDefault();
-                console.warn('saveasss', rawBtn.href);
+                const fileName = rawBtn.href.split('/').pop();
                 // @ts-ignore
-                GM_download({ url: rawBtn.href, name: rawBtn.href.split('/').pop(), onerror: console.warn });
+                GM_download({
+                    url: rawBtn.href,
+                    name: fileName,
+                    onerror: (err) => {
+                        if (confirm(err.error + `: you may need add extension ".${fileName.split('.').pop()}" to Tampermonkey's whitelist. Click OK to see how.`)) {
+                            utils.openLink('https://github.com/oe/download-git-userscript#before-using');
+                        }
+                    }
+                });
             };
-            // btn.download = ''
         }
         else {
-            url = `https://minhaskamal.github.io/DownGit/#/home?url=${encodeURIComponent(getCurrentUrlPath())}`;
+            url = `https://minhaskamal.github.io/DownGit/#/home?url=${encodeURIComponent(utils.getCurrentUrlPath())}`;
         }
         btn.textContent = 'Download';
         btn.href = url;
-        return btn;
+        $fileNavi.appendChild(btn);
     }
-    // remove qeurystring & hash
-    function getCurrentUrlPath() {
-        const url = location.origin + location.pathname;
-        return url.replace(/\/$/, '');
-    }
-    function injectDownload() {
-        const $fileNavi = getFileNavi();
-        if (!isRepo() || !$fileNavi) {
-            console.log('not repo');
+    function addCopyTextBtn() {
+        if (!utils.isTextBasedSinglePage() || document.getElementById('xiu-copy-btn')) {
             return;
         }
-        const btn = createDownloadBtn();
-        $fileNavi.appendChild(btn);
-        console.log('is repo');
+        const rawBtn = utils_1.getRawBtn();
+        // <a href="/Kyome22/IronKeyboard/raw/master/Keyboard/Line1.swift" id="raw-url" role="button" class="btn btn-sm BtnGroup-item ">Raw</a>
+        const copyBtn = document.createElement('a');
+        copyBtn.setAttribute('role', 'button');
+        copyBtn.className = 'btn btn-sm BtnGroup-item';
+        copyBtn.href = '#';
+        copyBtn.id = 'xiu-copy-btn';
+        copyBtn.textContent = 'Copy';
+        copyBtn.onclick = async (e) => {
+            e.preventDefault();
+            try {
+                const text = await utils.getUrlTextResponse(rawBtn.href);
+                // @ts-ignore
+                GM_setClipboard(text);
+            }
+            catch (error) {
+                console.warn(error);
+            }
+        };
+        rawBtn.insertAdjacentElement('beforebegin', copyBtn);
     }
 })();
 

@@ -1,6 +1,5 @@
 # Download github userscript
 
-
 ## before using
 This script use Tampermonkey's `Download` feature to download single code file, and it follows Tampermonkey's Secure restrictions:
 >  for security reasons the file extension needs to be whitelisted at Tampermonkey's options page

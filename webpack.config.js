@@ -56,12 +56,14 @@ module.exports = {
     new WebpackUserscript({
       headers ({ name, version }) {
         return {
-          name,
-          version: version + '.alpha',
+          name: 'Download github repo dir',
+          version: version,
           author: 'Saiya',
           description: 'download github directory via one click',
+          supportURL: 'https://github.com/oe/download-git-userscript/issues',
+          connect: ['raw.githubusercontent.com'],
           match: ['https://github.com/*', 'https://gist.github.com/*'],
-          grant: ['GM_download'],
+          grant: ['GM_download', 'GM_xmlhttpRequest', 'GM_setClipboard'],
           noframes: true
         }
       },
