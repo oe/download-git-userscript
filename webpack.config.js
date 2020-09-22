@@ -61,7 +61,7 @@ module.exports = {
           author: 'Saiya',
           description: 'download github directory via one click',
           match: ['https://github.com/*', 'https://gist.github.com/*'],
-          grant: [],
+          grant: ['GM_download'],
           noframes: true
         }
       },

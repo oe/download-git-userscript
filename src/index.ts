@@ -1,4 +1,3 @@
-import { saveAs } from 'file-saver'
 (function () {
   injectDownload()
 
@@ -79,7 +78,8 @@ import { saveAs } from 'file-saver'
       btn.onclick = function (e) {
         e.preventDefault()
         console.warn('saveasss', rawBtn.href)
-        saveAs(rawBtn.href, rawBtn.href.split('/').pop())
+        // @ts-ignore
+        GM_download({url: rawBtn.href, name: rawBtn.href.split('/').pop(), onerror: console.warn})
       }
       // btn.download = ''
     } else {
