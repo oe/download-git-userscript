@@ -19,8 +19,7 @@ import { getRawBtn } from './utils'
     } else {
       // to deal with octree, it append elements as siblings of #js-repo-pjax-container 
       //   which is inside of child of .application-main
-      targetNode = document.querySelector('.application-main')
-      if (targetNode) targetNode = targetNode.firstElementChild as HTMLElement
+      targetNode = document.querySelector('#js-repo-pjax-container')
     }
     if (!targetNode) return
     // Callback function to execute when mutations are observed
