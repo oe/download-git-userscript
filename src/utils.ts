@@ -1,23 +1,12 @@
   /**
    * is gist website
    */
-  export function isGist() {
-    return location.hostname === 'gist.github.com'
-  }
+export function isGist() {
+  return location.hostname === 'gist.github.com'
+}
 
-  export function isRepo() {
-    return document.querySelector('.repository-content')
-  }
-
-export function getFileNavi() {
-  let $navi = document.querySelector('.repository-content .file-navigation')
-  if (!$navi) {
-    $navi = document.querySelector('#blob-more-options-details')
-    if ($navi) {
-      $navi = $navi.parentElement
-    }
-  }
-  return $navi
+export function isRepo() {
+  return document.querySelector('.repository-content')
 }
 
 export function isPrivateRepo() {
@@ -26,9 +15,7 @@ export function isPrivateRepo() {
 }
 
 export function isRepoRootDir() {
-  const $fileNavi = getFileNavi()
-  if (!$fileNavi) return false
-  return !!$fileNavi.querySelector('get-repo')
+  return !!document.querySelector('.repository-content  get-repo')
 }
 
 export function isTextBasedSinglePage() {

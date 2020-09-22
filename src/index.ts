@@ -37,17 +37,31 @@ import { getRawBtn } from './utils'
   }
 
   function addDownloadBtn() {
-    const $fileNavi = utils.getFileNavi()
-    if (!$fileNavi) return
-    
 
-    let btn = document.getElementById('xiu-download-btn') as HTMLAnchorElement
-    if (!btn) {
-      btn = document.createElement('a')
-      btn.id = 'xiu-download-btn'
+    let $navi = document.querySelector('.repository-content .file-navigation') as HTMLElement
+    if ($navi) {
+      const downloadBtn = getDownloadBtn($navi)
+      downloadBtn.className += ' ml-2'
+      $navi.appendChild(downloadBtn)
+      return
     }
-    btn.className = 'btn ml-2 d-none d-md-block'
-    btn.target = '_blank'
+    const moreBtn = document.querySelector('#blob-more-options-details')
+    if (!moreBtn) return
+    $navi = moreBtn.parentElement as HTMLElement
+    const downloadBtn = getDownloadBtn($navi)
+    downloadBtn.className += ' mr-2'
+    moreBtn.insertAdjacentElement('beforebegin', downloadBtn)
+  }
+
+
+  function getDownloadBtn($fileNavi: HTMLElement) {
+    let downloadBtn = document.getElementById('xiu-download-btn') as HTMLAnchorElement
+    if (!downloadBtn) {
+      downloadBtn = document.createElement('a')
+      downloadBtn.id = 'xiu-download-btn'
+    }
+    downloadBtn.className = 'btn d-none d-md-block'
+    downloadBtn.target = '_blank'
     let url = ''
     if (utils.isRepoRootDir()) {
       const link = $fileNavi.querySelector('get-repo a[href$=".zip"]') as HTMLAnchorElement
@@ -55,7 +69,7 @@ import { getRawBtn } from './utils'
     } else if (utils.getRawBtn()) {
       const rawBtn = utils.getRawBtn() as HTMLAnchorElement
       url = rawBtn.href
-      btn.onclick = function (e) {
+      downloadBtn.onclick = function (e) {
         e.preventDefault()
         const fileName = rawBtn.href.split('/').pop()!
         // @ts-ignore
@@ -70,10 +84,11 @@ import { getRawBtn } from './utils'
     } else {
       url = `https://minhaskamal.github.io/DownGit/#/home?url=${encodeURIComponent(utils.getCurrentUrlPath())}`
     }
-    btn.textContent = 'Download'
-    btn.href = url
-    $fileNavi.appendChild(btn)
+    downloadBtn.textContent = 'Download'
+    downloadBtn.href = url
+    return downloadBtn
   }
+
 
   function addCopyTextBtn () {
     if (!utils.isTextBasedSinglePage() || document.getElementById('xiu-copy-btn')) {

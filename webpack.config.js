@@ -40,7 +40,7 @@ module.exports = {
     extensions: [ '.tsx', '.ts', '.js' ],
   },
   optimization: {
-    minimize: false
+    minimize: !isDev
   },
   devServer: {
     https: enableHTTPS,
