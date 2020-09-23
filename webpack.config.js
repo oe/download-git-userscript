@@ -56,10 +56,12 @@ module.exports = {
     new WebpackUserscript({
       headers ({ name, version }) {
         return {
-          name: 'Download github repo dir',
+          name: 'Download github repo sub-folder',
           version: version,
           author: 'Saiya',
-          description: 'download github directory via one click',
+          namespace: 'https://app.evecalm.com',          
+          description: 'download github directory via one click, copy the single file\'s source code easily',
+          homepageURL: 'https://github.com/oe/download-git-userscript',
           supportURL: 'https://github.com/oe/download-git-userscript/issues',
           connect: ['raw.githubusercontent.com'],
           match: ['https://github.com/*', 'https://gist.github.com/*'],
@@ -71,7 +73,7 @@ module.exports = {
         baseUrl: 'file://' + encodeURI(outputPath),
         enable: isDev
       },
-      pretty: isDev ? true : false
+      pretty: isDev
     })
   ]
 }
