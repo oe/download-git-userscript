@@ -76,7 +76,7 @@ import { getRawBtn } from './utils'
           url: rawBtn.href, 
           name: fileName, onerror: (err: any) => {
             if (confirm(err.error + `: you may need add extension ".${fileName.split('.').pop()}" to Tampermonkey's whitelist. Click OK to see how.`)) {
-              utils.openLink('https://github.com/oe/download-git-userscript#before-using')
+              utils.openLink('https://github.com/oe/download-git-userscript#configure-the-script-manager')
             }
           }})
       }

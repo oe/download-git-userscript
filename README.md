@@ -8,7 +8,6 @@ All its features are seamless integrated with Github, and works great with [octo
 
 ![Download Github screenshot](./screenshot.png)
 
-
 ## Usage
 
 ### Install a user script manager
@@ -23,9 +22,9 @@ To use user scripts you need to first install a user script manager. Which user 
   * Dolphin: [Tampermonkey](https://play.google.com/store/apps/details?id=net.tampermonkey.dolphin)
   * UC: [Tampermonkey](https://www.tampermonkey.net/?browser=ucweb&ext=dhdg)
 
-### install this user script
+### Install this user script
   
-
+[click here to install this script](https://greasyfork.org/scripts/411834-download-github-repo-sub-folder/code/Download%20github%20repo%20sub-folder.user.js)
 
 
 ### Configure the script manager
