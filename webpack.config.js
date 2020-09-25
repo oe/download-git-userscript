@@ -60,7 +60,7 @@ module.exports = {
           version: version,
           author: 'Saiya',
           namespace: 'https://app.evecalm.com',          
-          description: 'download github directory via one click, copy the single file\'s source code easily',
+          description: 'download github sub-folder via one click, copy the single file\'s source code easily',
           homepageURL: 'https://github.com/oe/download-git-userscript',
           supportURL: 'https://github.com/oe/download-git-userscript/issues',
           connect: ['raw.githubusercontent.com'],
