@@ -1,4 +1,7 @@
-# Download Github User script
+# Download Github Sub-folder User script
+
+[中文说明](#中文说明)
+
 It's a useful user script for Github users:
 1. allow you to donwload a sub-folder of a repo online without cloning the whole repository
 to your machine
@@ -43,6 +46,43 @@ You can added your custom file extension the whitelist by follow steps:
 ```
 
 or you can add `/\..*$/` to the list to allow any file extensions at your own risk
+
+
+### Credits
+This script  use [downgit](https://minhaskamal.github.io/DownGit/)([sourcecode](https://github.com/minhaskamal/DownGit/)) to download github sub-folder
+
+
+# 中文说明
+无需克隆GitHub仓库, 一键在线下载 Github仓库子文件夹; 同时还能在源码详情页一键复制源码.
+
+下载按钮 和 复制按钮无缝和 Github.com 集成, 示例效果如下:
+
+![Download Github screenshot](./screenshot.png)
+
+credits: 在线下载Github仓库的文件夹功能使用开源项目 [downgit](https://minhaskamal.github.io/DownGit/)([源码](https://github.com/minhaskamal/DownGit/)) 实现
+
+
+## 使用说明
+
+### 安装脚本管理器
+
+Chrome 用户推荐安装浏览器扩展: [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) 
+
+其他选择可参考: [安装一个用户脚本管理器](https://greasyfork.org/zh-CN#home-step-1)
+
+### 脚本管理器配置
+本脚本的下载Github单个文件的功能依赖脚本管理器的 `GM_download` 权限, 需遵循脚本管理器的安全策略, 如 [Tampermonkey](https://www.tampermonkey.net/documentation.php?ext=dhdg#GM_download) 官方所说:
+
+> 因安全原因所下载的文件后缀名必须添加至 Tampermonkey 的白名单中
+
+你可以按下述步骤来设置 Tampermonkey:
+1. 在 Chrome 中打开 Tampermonkey 的设置页面, 你可以直接复制 `chrome-extension://dhdgffkkebhmkfjojejmpbldmpobfkfo/options.html#nav=settings` 在Chrome地址栏中打开
+2. 在 `General` 设置组 将 `Config mode` 改为 `Advanced`
+3. 然后再滚动到页面底部, 找到 `Downloads BETA`, 将你需要下载的文件后缀追加至 `Whitelisted File Extensions:` 中:
+   > 如可以添加常用代码文件后缀 `/\.(js|ts|jsx|tsx|json|java|go|cpp|c|swift|cmd|sh|md|markdown|rb)$/`  
+   > 如果嫌麻烦, 也可以添加 `/\..*$/` 来允许下载任意后缀文件, 需自行注意所下载文件的安全问题
+
+
 
 
 
