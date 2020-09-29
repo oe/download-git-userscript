@@ -1,6 +1,6 @@
 {
   "name": "download-git-userscript",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --config-name main --host 127.0.0.1 --watch-poll",
     "lint": "eslint .",
@@ -10,6 +10,7 @@
   "devDependencies": {
     "@babel/core": "^7.11.6",
     "@babel/preset-env": "^7.11.5",
+    "@types/file-saver": "^2.0.1",
     "@typescript-eslint/eslint-plugin": "^4.1.1",
     "@typescript-eslint/parser": "^4.1.1",
     "babel-loader": "^8.1.0",
@@ -22,5 +23,9 @@
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0",
     "webpack-userscript": "^2.5.6"
+  },
+  "dependencies": {
+    "file-saver": "^2.0.2",
+    "jszip": "^3.5.0"
   }
 }
