@@ -2,6 +2,8 @@
 
 [中文说明](#中文说明)
 
+> You can create your own userscript power by webpack/es6/typescript/etc by starting from this [template](https://github.com/oe/webpack-userscript-template)
+
 It's a useful user script for Github users:
 1. allow you to donwload a sub-folder of a repo online without cloning the whole repository
 to your machine
