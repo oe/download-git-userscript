@@ -59,15 +59,19 @@ module.exports = {
           name: 'Download github repo sub-folder',
           version: version,
           author: 'Saiya',
-          namespace: 'https://app.evecalm.com',          
-          description: 'download github sub-folder via one click, copy the single file\'s source code easily',
+          namespace: 'https://app.evecalm.com',
+          description:
+            "download github sub-folder via one click, copy the single file's source code easily",
+          'name:zh-CN': '在线下载Github仓库文件夹',
+          'description:zh-CN':
+            '无需克隆GitHub仓库, 一键在线下载 Github仓库子文件夹; 同时还能在源码详情页一键复制源码',
           homepageURL: 'https://github.com/oe/download-git-userscript',
           supportURL: 'https://github.com/oe/download-git-userscript/issues',
           connect: ['raw.githubusercontent.com'],
           match: ['https://github.com/*', 'https://gist.github.com/*'],
           grant: ['GM_setClipboard'],
           noframes: true
-        }
+        };
       },
       proxyScript: {
         baseUrl: 'file://' + encodeURI(outputPath),
