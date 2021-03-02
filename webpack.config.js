@@ -40,7 +40,7 @@ module.exports = {
     extensions: [ '.tsx', '.ts', '.js' ],
   },
   optimization: {
-    minimize: !isDev
+    minimize: false
   },
   devServer: {
     https: enableHTTPS,
@@ -65,7 +65,7 @@ module.exports = {
           supportURL: 'https://github.com/oe/download-git-userscript/issues',
           connect: ['raw.githubusercontent.com'],
           match: ['https://github.com/*', 'https://gist.github.com/*'],
-          grant: ['GM_download', 'GM_xmlhttpRequest', 'GM_setClipboard'],
+          grant: ['GM_setClipboard'],
           noframes: true
         }
       },

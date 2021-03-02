@@ -22,17 +22,18 @@ import { getRawBtn } from './utils'
       targetNode = document.querySelector('#js-repo-pjax-container')
     }
     if (!targetNode) return
+    let tid: any = 0
     // Callback function to execute when mutations are observed
     const callback = function(mutationsList: MutationRecord[]) {
-      console.log('mutation change', mutationsList)
-      main()
+      clearTimeout(tid)
+      tid = setTimeout(main, 100)
     }
   
     // Create an observer instance linked to the callback function
     const observer = new MutationObserver(callback)
   
     // Start observing the target node for configured mutations
-    observer.observe(targetNode, { childList: true, subtree: false })    
+    observer.observe(targetNode, { childList: true, subtree: true })    
   }
 
   function addDownloadBtn() {
@@ -40,7 +41,7 @@ import { getRawBtn } from './utils'
     let $navi = document.querySelector('.repository-content .file-navigation') as HTMLElement
     if ($navi) {
       const downloadBtn = getDownloadBtn($navi)
-      downloadBtn.className += ' ml-2'
+      if ($navi.contains(downloadBtn)) return
       $navi.appendChild(downloadBtn)
       return
     }
@@ -48,8 +49,8 @@ import { getRawBtn } from './utils'
     if (!moreBtn) return
     $navi = moreBtn.parentElement as HTMLElement
     const downloadBtn = getDownloadBtn($navi)
-    downloadBtn.className += ' mr-2'
-    moreBtn.insertAdjacentElement('beforebegin', downloadBtn)
+    if ($navi.contains(downloadBtn)) return
+    moreBtn.insertAdjacentElement('afterend', downloadBtn)
   }
 
 
@@ -59,29 +60,14 @@ import { getRawBtn } from './utils'
       downloadBtn = document.createElement('a')
       downloadBtn.id = 'xiu-download-btn'
     }
-    downloadBtn.className = 'btn d-none d-md-block'
+    downloadBtn.className = 'btn d-none d-md-block ml-2'
     downloadBtn.target = '_blank'
     let url = ''
     if (utils.isRepoRootDir()) {
       const link = $fileNavi.querySelector('get-repo a[href$=".zip"]') as HTMLAnchorElement
       url = link.href
-    } else if (utils.getRawBtn()) {
-      const rawBtn = utils.getRawBtn() as HTMLAnchorElement
-      url = rawBtn.href
-      downloadBtn.onclick = function (e) {
-        e.preventDefault()
-        const fileName = rawBtn.href.split('/').pop()!
-        // @ts-ignore
-        GM_download({
-          url: rawBtn.href, 
-          name: fileName, onerror: (err: any) => {
-            if (confirm(err.error + `: you may need add extension ".${fileName.split('.').pop()}" to Tampermonkey's whitelist. Click OK to see how.`)) {
-              utils.openLink('https://github.com/oe/download-git-userscript#configure-the-script-manager')
-            }
-          }})
-      }
     } else {
-      url = `https://minhaskamal.github.io/DownGit/#/home?url=${encodeURIComponent(utils.getCurrentUrlPath())}`
+      url = `https://downgit.evecalm.com/#/home?url=${encodeURIComponent(utils.getCurrentUrlPath())}`
     }
     downloadBtn.textContent = 'Download'
     downloadBtn.href = url
@@ -111,9 +97,6 @@ import { getRawBtn } from './utils'
         console.warn(error)
       }
     }
-
     rawBtn.insertAdjacentElement('beforebegin', copyBtn)
-
   }
-
 })()

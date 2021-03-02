@@ -4,6 +4,8 @@
 
 > You can create your own userscript power by webpack/es6/typescript/etc by starting from this [template](https://github.com/oe/webpack-userscript-template)
 
+If you have any issues with this script, please create an issue on [Github](https://github.com/oe/download-git-userscript/issues)
+
 It's a useful user script for Github users:
 1. allow you to donwload a sub-folder of a repo online without cloning the whole repository
 to your machine
@@ -32,36 +34,24 @@ To use user scripts you need to first install a user script manager. Which user 
 [click here to install this script](https://greasyfork.org/scripts/411834-download-github-repo-sub-folder/code/Download%20github%20repo%20sub-folder.user.js)
 
 
-### Configure the script manager
-This script use script manager's `Download` feature to download single code file, and it must follow script manager's Secure restrictions, like [Tampermonkey](https://www.tampermonkey.net/documentation.php?ext=dhdg#GM_download) says:
->  for security reasons the file extension needs to be whitelisted at Tampermonkey's options page
-
-The following steps showing you how to config that in Tampermonkey
-
-You can added your custom file extension the whitelist by follow steps:
-
-1. open Tampermonkey extension settings page, in Chrome it's `chrome-extension://dhdgffkkebhmkfjojejmpbldmpobfkfo/options.html#nav=settings`
-2. change `General` -> `Config mode` to `Advanced`
-3. Scroll to `Downloads BETA`, add file extension Regexp to the `Whitelisted File Extensions:`, e.g.:
-```regexp
-/\.(js|ts|jsx|tsx|json|java|go|cpp|c|swift|cmd|sh|md|markdown|rb)$/
-```
-
-or you can add `/\..*$/` to the list to allow any file extensions at your own risk
+### Configure DownGit web app(not required)
+Due to github api requests rate limit, if you use [DownGit](https://downgit.evecalm.com/) frequently, you may failed to download files with it. Then you can click ***Github Auth*** button in the center of [DownGit](https://downgit.evecalm.com/) to auth your account with this app.
 
 
 ### Credits
-This script  use [downgit](https://minhaskamal.github.io/DownGit/)([sourcecode](https://github.com/minhaskamal/DownGit/)) to download github sub-folder
+This script use [Downgit](https://downgit.evecalm.com/)([sourcecode](https://github.com/oe/DownGit/)) to download github sub-folder. DownGit is forked from [MinhasKamal](https://github.com/MinhasKamal/DownGit), I just added Github Auth feature. Thanks to [MinhasKamal](https://github.com/MinhasKamal/)
 
 
 # 中文说明
 无需克隆GitHub仓库, 一键在线下载 Github仓库子文件夹; 同时还能在源码详情页一键复制源码.
 
+> 如果你使用中遇到任何问题, 欢迎在[Github](https://github.com/oe/download-git-userscript/issues) 上提交 issue
+
 下载按钮 和 复制按钮无缝和 Github.com 集成, 示例效果如下:
 
 ![Download Github screenshot](./screenshot.png)
 
-credits: 在线下载Github仓库的文件夹功能使用开源项目 [downgit](https://minhaskamal.github.io/DownGit/)([源码](https://github.com/minhaskamal/DownGit/)) 实现
+在线下载Github仓库的文件夹功能使用开源项目 [DownGit](https://downgit.evecalm.com/)([源码](https://github.com/oe/DownGit/)) 实现. 该项目fork自[MinhasKamal](https://github.com/MinhasKamal/DownGit), 本人增加了GitHub auth授权功能, auth 授权后, downgit则拥有更多的Github API调用频次, 即可以用于下载更多github文件.
 
 
 ## 使用说明
@@ -72,21 +62,10 @@ Chrome 用户推荐安装浏览器扩展: [Tampermonkey](https://chrome.google.
 
 其他选择可参考: [安装一个用户脚本管理器](https://greasyfork.org/zh-CN#home-step-1)
 
-### 脚本管理器配置
-本脚本的下载Github单个文件的功能依赖脚本管理器的 `GM_download` 权限, 需遵循脚本管理器的安全策略, 如 [Tampermonkey](https://www.tampermonkey.net/documentation.php?ext=dhdg#GM_download) 官方所说:
+### DownGit 网站配置(非必须)
+因为Github对第三方应用调用API频率有限制, 如果你经常使用[DownGit](https://downgit.evecalm.com/)下载文件, 则可能出现下载失败的情况. 
 
-> 因安全原因所下载的文件后缀名必须添加至 Tampermonkey 的白名单中
-
-你可以按下述步骤来设置 Tampermonkey:
-1. 在 Chrome 中打开 Tampermonkey 的设置页面, 你可以直接复制 `chrome-extension://dhdgffkkebhmkfjojejmpbldmpobfkfo/options.html#nav=settings` 在Chrome地址栏中打开
-2. 在 `General` 设置组 将 `Config mode` 改为 `Advanced`
-3. 然后再滚动到页面底部, 找到 `Downloads BETA`, 将你需要下载的文件后缀追加至 `Whitelisted File Extensions:` 中:
-   > 如可以添加常用代码文件后缀 `/\.(js|ts|jsx|tsx|json|java|go|cpp|c|swift|cmd|sh|md|markdown|rb)$/`  
-   > 如果嫌麻烦, 也可以添加 `/\..*$/` 来允许下载任意后缀文件, 需自行注意所下载文件的安全问题
-
-
-
-
+此时就建议你点击网站中间的 ***Github Auth*** 按钮进行 Auth 授权, 这样 DownGit 可以拥有更多api调用次数, 能下载更多的文件. 
 
 ## develop steps
 

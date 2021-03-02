@@ -27,23 +27,14 @@ export function isTextBasedSinglePage() {
 }
 
 export function getUrlTextResponse(url: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    // @ts-ignore
-    GM_xmlhttpRequest({
-      method: 'GET',
-      url,
-      ontimeout: reject,
-      onabort: reject,
-      onerror: reject,
-      onload: (res: any) => {
-        if (res.responseText) {
-          resolve(res.responseText)
-        } else {
-          reject(res)
-        }
-      }
-    })
+  let apiUrl = url
+    .replace('github.com/', 'api.github.com/repos/')
+    .replace(/\/raw\/([^/]+)\//, '/contents/')
+    + `?ref=${RegExp.$1}`
+  return fetch(apiUrl, {
+    headers: { Accept: 'application/vnd.github.v3.raw' }
   })
+  .then(res => res.text())
 }
 
 // if is single file page, then it has a raw btn
