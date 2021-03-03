@@ -6,12 +6,10 @@
 
 If you have any issues with this script, please create an issue on [Github](https://github.com/oe/download-git-userscript/issues)
 
-It's a useful user script for Github users:
-1. allow you to donwload a sub-folder of a repo online without cloning the whole repository
-to your machine
-2. allow you to copy source code in repo's single file view
-
-All its features are seamless integrated with Github, and works great with [octotree](https://github.com/ovity/octotree).
+## Features
+* **download github source code online**: allow you to download whole repo,  a sub-folder of a repo  or a single file online without `git clone` locally
+* **copy source code content by one click**: allow you to copy source code in repo's single file view
+* **seamless integration**: seamless integrated with Github, and works great with [octotree](https://github.com/ovity/octotree).
 
 ![Download Github screenshot](./screenshot.png)
 
@@ -30,7 +28,7 @@ To use user scripts you need to first install a user script manager. Which user 
   * UC: [Tampermonkey](https://www.tampermonkey.net/?browser=ucweb&ext=dhdg)
 
 ### Install this user script
-  
+
 [click here to install this script](https://greasyfork.org/scripts/411834-download-github-repo-sub-folder/code/Download%20github%20repo%20sub-folder.user.js)
 
 
@@ -43,9 +41,19 @@ This script use [Downgit](https://downgit.evecalm.com/)([sourcecode](https://git
 
 
 # 中文说明
+
 无需克隆GitHub仓库, 一键在线下载 Github仓库子文件夹; 同时还能在源码详情页一键复制源码.
 
-> 如果你使用中遇到任何问题, 欢迎在[Github](https://github.com/oe/download-git-userscript/issues) 上提交 issue
+> 你也可以使用模版 [template](https://github.com/oe/webpack-userscript-template)使用 webpack/es6/typescript/等技术=来创建你自己的 userscript.
+
+如果你使用中遇到任何问题, 欢迎在[Github](https://github.com/oe/download-git-userscript/issues) 上提交 issue
+## 特性
+* **在线下载Github仓库源码**: 你可以在线下载整个仓库、仓库的某个文件夹、单个文件的代码, 无需在机器上使用`git clone`命令下载完整仓库
+* **一键复制源代码**: 在浏览单个文件时, 可以快速一键复制源码
+* **无缝集成**: 与 GitHub 无缝集成, 看起来就像是原生功能, 与 Github 增强扩展 [octotree](https://github.com/ovity/octotree) 也能无缝配合
+
+
+
 
 下载按钮 和 复制按钮无缝和 Github.com 集成, 示例效果如下:
 
