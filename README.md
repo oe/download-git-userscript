@@ -47,15 +47,11 @@ This script use [Downgit](https://downgit.evecalm.com/)([sourcecode](https://git
 > 你也可以使用模版 [template](https://github.com/oe/webpack-userscript-template)使用 webpack/es6/typescript/等技术=来创建你自己的 userscript.
 
 如果你使用中遇到任何问题, 欢迎在[Github](https://github.com/oe/download-git-userscript/issues) 上提交 issue
-## 特性
+## 功能特性
 * **在线下载Github仓库源码**: 你可以在线下载整个仓库、仓库的某个文件夹、单个文件的代码, 无需在机器上使用`git clone`命令下载完整仓库
 * **一键复制源代码**: 在浏览单个文件时, 可以快速一键复制源码
 * **无缝集成**: 与 GitHub 无缝集成, 看起来就像是原生功能, 与 Github 增强扩展 [octotree](https://github.com/ovity/octotree) 也能无缝配合
 
-
-
-
-下载按钮 和 复制按钮无缝和 Github.com 集成, 示例效果如下:
 
 ![Download Github screenshot](./screenshot.png)
 
@@ -69,6 +65,10 @@ This script use [Downgit](https://downgit.evecalm.com/)([sourcecode](https://git
 Chrome 用户推荐安装浏览器扩展: [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) 
 
 其他选择可参考: [安装一个用户脚本管理器](https://greasyfork.org/zh-CN#home-step-1)
+
+### 安装脚本
+
+[点此来安装脚本](https://greasyfork.org/scripts/411834-download-github-repo-sub-folder/code/Download%20github%20repo%20sub-folder.user.js)
 
 ### DownGit 网站配置(非必须)
 因为Github对第三方应用调用API频率有限制, 如果你经常使用[DownGit](https://downgit.evecalm.com/)下载文件, 则可能出现下载失败的情况. 
