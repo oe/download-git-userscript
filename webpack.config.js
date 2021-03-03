@@ -66,6 +66,8 @@ module.exports = {
           'description:zh-CN':
             '无需克隆GitHub仓库, 一键在线下载 Github仓库子文件夹; 同时还能在源码详情页一键复制源码',
           homepageURL: 'https://github.com/oe/download-git-userscript',
+          licence: 'MIT',
+          icon: 'https://github.githubassets.com/pinned-octocat.svg',
           supportURL: 'https://github.com/oe/download-git-userscript/issues',
           connect: ['raw.githubusercontent.com'],
           match: ['https://github.com/*', 'https://gist.github.com/*'],
