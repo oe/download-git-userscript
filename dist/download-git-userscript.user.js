@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name Download github repo sub-folder
-// @version 0.2.6
+// @version 0.2.7
 // @author Saiya
 // @description download github sub-folder via one click, copy the single file's source code easily
 // @supportURL https://github.com/oe/download-git-userscript/issues
@@ -119,7 +119,12 @@ function isGist() {
 }
 exports.isGist = isGist;
 function isRepo() {
-    return document.querySelector('.repository-content');
+    if (!document.querySelector('.repository-content'))
+        return false;
+    const meta = document.querySelector('meta[name="selected-link"]');
+    if (meta && meta.getAttribute('value') === 'repo_commits')
+        return false;
+    return true;
 }
 exports.isRepo = isRepo;
 function isPrivateRepo() {
@@ -202,6 +207,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const utils = __importStar(__webpack_require__(0));
 const utils_1 = __webpack_require__(0);
 (function () {
+    const DOWNLOAD_BTN_ID = 'xiu-download-btn';
     main();
     observePageChange();
     function main() {
@@ -227,7 +233,16 @@ const utils_1 = __webpack_require__(0);
         // Callback function to execute when mutations are observed
         const callback = function (mutationsList) {
             clearTimeout(tid);
-            tid = setTimeout(main, 100);
+            // if download button exists, and textContent just been changed
+            //    e.g. translated by browser
+            if (mutationsList.some(mutation => {
+                if (mutation.type === 'childList' &&
+                    mutation.target.id === DOWNLOAD_BTN_ID &&
+                    mutation.target.textContent !== 'Download')
+                    return true;
+            }))
+                return;
+            tid = setTimeout(main, 200);
         };
         // Create an observer instance linked to the callback function
         const observer = new MutationObserver(callback);
@@ -253,10 +268,10 @@ const utils_1 = __webpack_require__(0);
         moreBtn.insertAdjacentElement('afterend', downloadBtn);
     }
     function getDownloadBtn($fileNavi) {
-        let downloadBtn = document.getElementById('xiu-download-btn');
+        let downloadBtn = document.getElementById(DOWNLOAD_BTN_ID);
         if (!downloadBtn) {
             downloadBtn = document.createElement('a');
-            downloadBtn.id = 'xiu-download-btn';
+            downloadBtn.id = DOWNLOAD_BTN_ID;
         }
         downloadBtn.className = 'btn d-none d-md-block ml-2';
         downloadBtn.target = '_blank';

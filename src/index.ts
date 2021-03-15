@@ -1,6 +1,7 @@
 import * as utils from './utils'
 import { getRawBtn } from './utils'
 (function () {
+  const DOWNLOAD_BTN_ID = 'xiu-download-btn'
   main()
   observePageChange()
 
@@ -26,7 +27,16 @@ import { getRawBtn } from './utils'
     // Callback function to execute when mutations are observed
     const callback = function(mutationsList: MutationRecord[]) {
       clearTimeout(tid)
-      tid = setTimeout(main, 100)
+      // if download button exists, and textContent just been changed
+      //    e.g. translated by browser
+      if (mutationsList.some(mutation => {
+        if (mutation.type === 'childList' && 
+          (mutation.target as HTMLElement).id === DOWNLOAD_BTN_ID &&
+          mutation.target.textContent !== 'Download'
+          ) return true
+      })) return
+
+      tid = setTimeout(main, 200)
     }
   
     // Create an observer instance linked to the callback function
@@ -37,7 +47,6 @@ import { getRawBtn } from './utils'
   }
 
   function addDownloadBtn() {
-
     let $navi = document.querySelector('.repository-content .file-navigation') as HTMLElement
     if ($navi) {
       const downloadBtn = getDownloadBtn($navi)
@@ -53,12 +62,11 @@ import { getRawBtn } from './utils'
     moreBtn.insertAdjacentElement('afterend', downloadBtn)
   }
 
-
   function getDownloadBtn($fileNavi: HTMLElement) {
-    let downloadBtn = document.getElementById('xiu-download-btn') as HTMLAnchorElement
+    let downloadBtn = document.getElementById(DOWNLOAD_BTN_ID) as HTMLAnchorElement | null
     if (!downloadBtn) {
       downloadBtn = document.createElement('a')
-      downloadBtn.id = 'xiu-download-btn'
+      downloadBtn.id = DOWNLOAD_BTN_ID
     }
     downloadBtn.className = 'btn d-none d-md-block ml-2'
     downloadBtn.target = '_blank'
