@@ -12,7 +12,8 @@
 // @homepageURL https://github.com/oe/download-git-userscript
 // @licence MIT
 // @icon https://github.githubassets.com/pinned-octocat.svg
-// @connect raw.githubusercontent.com
+// @connect cdn.jsdelivr.net
 // @grant GM_setClipboard
+// @grant GM_xmlhttpRequest
 // @noframes 
 // ==/UserScript==

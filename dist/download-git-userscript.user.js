@@ -12,8 +12,9 @@
 // @homepageURL https://github.com/oe/download-git-userscript
 // @licence MIT
 // @icon https://github.githubassets.com/pinned-octocat.svg
-// @connect raw.githubusercontent.com
+// @connect cdn.jsdelivr.net
 // @grant GM_setClipboard
+// @grant GM_xmlhttpRequest
 // @noframes 
 // ==/UserScript==
 
@@ -148,14 +149,22 @@ function isTextBasedSinglePage() {
 }
 exports.isTextBasedSinglePage = isTextBasedSinglePage;
 function getUrlTextResponse(url) {
+    // https://github.com/oe/search/raw/gh-pages/app-icon-retina.f492fc13.png
+    // https://cdn.jsdelivr.net/gh/oe/search@gh-pages/app-icon-retina.f492fc13.png
+    // https://github.com/oe/search/raw/master/CNAME
     let apiUrl = url
-        .replace('github.com/', 'api.github.com/repos/')
-        .replace(/\/raw\/([^/]+)\//, '/contents/')
-        + `?ref=${RegExp.$1}`;
-    return fetch(apiUrl, {
-        headers: { Accept: 'application/vnd.github.v3.raw' }
-    })
-        .then(res => res.text());
+        .replace('github.com/', 'cdn.jsdelivr.net/gh/')
+        .replace('/raw/', '@');
+    return new Promise((resolve, reject) => {
+        // @ts-ignore
+        GM_xmlhttpRequest({
+            url: apiUrl,
+            method: 'GET',
+            onload: (s) => {
+                resolve(s.responseText);
+            }
+        });
+    });
 }
 exports.getUrlTextResponse = getUrlTextResponse;
 // if is single file page, then it has a raw btn

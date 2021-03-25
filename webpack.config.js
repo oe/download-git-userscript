@@ -69,9 +69,9 @@ module.exports = {
           licence: 'MIT',
           icon: 'https://github.githubassets.com/pinned-octocat.svg',
           supportURL: 'https://github.com/oe/download-git-userscript/issues',
-          connect: ['raw.githubusercontent.com'],
+          connect: ['cdn.jsdelivr.net'],
           match: ['https://github.com/*', 'https://gist.github.com/*'],
-          grant: ['GM_setClipboard'],
+          grant: ['GM_setClipboard', 'GM_xmlhttpRequest'],
           noframes: true
         };
       },

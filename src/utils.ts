@@ -30,14 +30,22 @@ export function isTextBasedSinglePage() {
 }
 
 export function getUrlTextResponse(url: string): Promise<string> {
+  // https://github.com/oe/search/raw/gh-pages/app-icon-retina.f492fc13.png
+  // https://cdn.jsdelivr.net/gh/oe/search@gh-pages/app-icon-retina.f492fc13.png
+  // https://github.com/oe/search/raw/master/CNAME
   let apiUrl = url
-    .replace('github.com/', 'api.github.com/repos/')
-    .replace(/\/raw\/([^/]+)\//, '/contents/')
-    + `?ref=${RegExp.$1}`
-  return fetch(apiUrl, {
-    headers: { Accept: 'application/vnd.github.v3.raw' }
+    .replace('github.com/', 'cdn.jsdelivr.net/gh/')
+    .replace('/raw/', '@')
+  return new Promise((resolve, reject) => {
+    // @ts-ignore
+    GM_xmlhttpRequest({
+      url: apiUrl,
+      method: 'GET',
+      onload: (s: any) => {
+        resolve(s.responseText)
+      }
+    })
   })
-  .then(res => res.text())
 }
 
 // if is single file page, then it has a raw btn
