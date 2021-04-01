@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name Download github repo sub-folder
-// @version 0.2.7
+// @version 0.3.0
 // @author Saiya
 // @description download github sub-folder via one click, copy the single file's source code easily
 // @supportURL https://github.com/oe/download-git-userscript/issues
@@ -124,6 +124,8 @@ function isRepo() {
         return false;
     const meta = document.querySelector('meta[name="selected-link"]');
     if (meta && meta.getAttribute('value') === 'repo_commits')
+        return false;
+    if (document.querySelector('.js-navigation-container>.TimelineItem'))
         return false;
     return true;
 }
