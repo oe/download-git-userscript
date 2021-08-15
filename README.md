@@ -29,7 +29,8 @@ To use user scripts you need to first install a user script manager. Which user 
 
 ### Install this user script
 
-[click here to install this script](https://greasyfork.org/scripts/411834-download-github-repo-sub-folder/code/Download%20github%20repo%20sub-folder.user.js)
+* [install script via greasyfork](https://greasyfork.org/scripts/411834-download-github-repo-sub-folder/code/Download%20github%20repo%20sub-folder.user.js), [greasyfork home page](https://greasyfork.org/scripts/411834-download-github-repo-sub-folder)
+* [install script via openuserjs](https://openuserjs.org/install/oe/Download_github_repo_online.user.js), [openuserjs home page](https://openuserjs.org/scripts/oe/Download_github_repo_online)
 
 
 ### Configure DownGit web app(not required)
@@ -69,6 +70,8 @@ Chrome 用户推荐安装浏览器扩展: [Tampermonkey](https://chrome.google.
 ### 安装脚本
 
 [点此来安装脚本](https://greasyfork.org/scripts/411834-download-github-repo-sub-folder/code/Download%20github%20repo%20sub-folder.user.js)
+* [从 greasyfork 安装脚本](https://greasyfork.org/scripts/411834-download-github-repo-sub-folder/code/Download%20github%20repo%20sub-folder.user.js), [greasyfork 主页](https://greasyfork.org/scripts/411834-download-github-repo-sub-folder)
+* [从 openuserjs 安装脚本](https://openuserjs.org/install/oe/Download_github_repo_online.user.js), [openuserjs 主页](https://openuserjs.org/scripts/oe/Download_github_repo_online)
 
 ### DownGit 网站配置(非必须)
 因为Github对第三方应用调用API频率有限制, 如果你经常使用[DownGit](https://downgit.evecalm.com/)下载文件, 则可能出现下载失败的情况. 
