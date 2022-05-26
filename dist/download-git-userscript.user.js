@@ -290,6 +290,9 @@ const utils_1 = __webpack_require__(0);
         if (utils.isRepoRootDir()) {
             const link = $fileNavi.querySelector('get-repo a[href$=".zip"]');
             url = link.href;
+            var arr = url.split("/");
+            var branch = arr[arr.length-1].split(".")[0];
+            url = 'https://codeload.github.com/' + arr.slice(3,5).join("/") + '/zip/' + arr.slice(6,8).join("/") + "/"+branch;
         }
         else {
             url = `https://downgit.evecalm.com/#/home?url=${encodeURIComponent(utils.getCurrentUrlPath())}`;
