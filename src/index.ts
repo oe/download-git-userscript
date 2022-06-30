@@ -23,7 +23,11 @@ import * as utils from './utils'
 
   function addDownloadBtn() {
     let $navi = document.querySelector('.application-main .file-navigation') as HTMLElement
-    if (!$navi) return
+    if (!$navi) {
+      $navi = document.getElementById('blob-more-options-details') as HTMLElement
+      if (!$navi) return
+      $navi = $navi.parentElement as HTMLElement
+    }
     const downloadBtn = getDownloadBtn($navi)
     if ($navi.contains(downloadBtn)) return
     $navi.appendChild(downloadBtn)
@@ -42,7 +46,7 @@ import * as utils from './utils'
       const link = $fileNavi.querySelector('get-repo a[href$=".zip"]') as HTMLAnchorElement
       url = link.href
     } else {
-      url = utils.getDownloadRedirectUrl(utils.getCurrentUrlPath())
+      url = utils.getGithubDownloadUrl(utils.getCurrentUrlPath())
     }
     downloadBtn.textContent = 'Download'
     downloadBtn.href = url
@@ -84,7 +88,8 @@ import * as utils from './utils'
       if (!['Directory', 'File'].includes(label)) return
       const url = target.parentElement?.nextElementSibling?.querySelector?.('a')?.href
       if (!url) return
-      utils.openLink(utils.getDownloadRedirectUrl(url))
+      const isFile = label === 'File'
+      utils.openLink(utils.getGithubDownloadUrl(url, isFile))
     })
   }
 })()

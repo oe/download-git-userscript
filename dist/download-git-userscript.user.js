@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name Download github repo sub-folder
-// @version 0.4.0
+// @version 0.5.0
 // @author Saiya
 // @description download github sub-folder via one click, copy the single file's source code easily
 // @supportURL https://github.com/oe/download-git-userscript/issues
@@ -151,8 +151,12 @@ const utils = __importStar(__webpack_require__(1));
     }
     function addDownloadBtn() {
         let $navi = document.querySelector('.application-main .file-navigation');
-        if (!$navi)
-            return;
+        if (!$navi) {
+            $navi = document.getElementById('blob-more-options-details');
+            if (!$navi)
+                return;
+            $navi = $navi.parentElement;
+        }
         const downloadBtn = getDownloadBtn($navi);
         if ($navi.contains(downloadBtn))
             return;
@@ -172,7 +176,7 @@ const utils = __importStar(__webpack_require__(1));
             url = link.href;
         }
         else {
-            url = utils.getDownloadRedirectUrl(utils.getCurrentUrlPath());
+            url = utils.getGithubDownloadUrl(utils.getCurrentUrlPath());
         }
         downloadBtn.textContent = 'Download';
         downloadBtn.href = url;
@@ -216,7 +220,8 @@ const utils = __importStar(__webpack_require__(1));
             const url = (_d = (_c = (_b = (_a = target.parentElement) === null || _a === void 0 ? void 0 : _a.nextElementSibling) === null || _b === void 0 ? void 0 : _b.querySelector) === null || _c === void 0 ? void 0 : _c.call(_b, 'a')) === null || _d === void 0 ? void 0 : _d.href;
             if (!url)
                 return;
-            utils.openLink(utils.getDownloadRedirectUrl(url));
+            const isFile = label === 'File';
+            utils.openLink(utils.getGithubDownloadUrl(url, isFile));
         });
     }
 })();
@@ -229,7 +234,7 @@ const utils = __importStar(__webpack_require__(1));
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDownloadRedirectUrl = exports.openLink = exports.getCurrentUrlPath = exports.getRawBtn = exports.getUrlTextResponse = exports.isTextBasedSinglePage = exports.isRepoRootDir = exports.isPrivateRepo = exports.isRepo = exports.isGist = void 0;
+exports.getGithubDownloadUrl = exports.openLink = exports.getCurrentUrlPath = exports.getRawBtn = exports.getUrlTextResponse = exports.isTextBasedSinglePage = exports.isRepoRootDir = exports.isPrivateRepo = exports.isRepo = exports.isGist = void 0;
 /**
  * is gist website
  */
@@ -305,10 +310,18 @@ function openLink(url) {
     link.click();
 }
 exports.openLink = openLink;
-function getDownloadRedirectUrl(url) {
+function getGithubDownloadUrl(url, isFile) {
+    try {
+        const u = new URL(url);
+        let paths = u.pathname.split('/');
+        paths[3] = 'raw';
+        u.pathname = paths.join('/');
+        return u.href;
+    }
+    catch (error) { }
     return `https://downgit.evecalm.com/#/home?url=${encodeURIComponent(url)}`;
 }
-exports.getDownloadRedirectUrl = getDownloadRedirectUrl;
+exports.getGithubDownloadUrl = getGithubDownloadUrl;
 
 
 /***/ })
