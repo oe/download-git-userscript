@@ -66,3 +66,7 @@ export function openLink(url: string) {
   link.href = url
   link.click()
 }
+
+export function getDownloadRedirectUrl(url: string) {
+  return `https://downgit.evecalm.com/#/home?url=${encodeURIComponent(url)}`
+}

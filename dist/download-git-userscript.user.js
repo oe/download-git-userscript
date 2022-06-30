@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name Download github repo sub-folder
-// @version 0.3.0
+// @version 0.4.0
 // @author Saiya
 // @description download github sub-folder via one click, copy the single file's source code easily
 // @supportURL https://github.com/oe/download-git-userscript/issues
@@ -101,7 +101,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -110,8 +110,126 @@
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.openLink = exports.getCurrentUrlPath = exports.getRawBtn = exports.getUrlTextResponse = exports.isTextBasedSinglePage = exports.isRepoRootDir = exports.isPrivateRepo = exports.isRepo = exports.isGist = void 0;
+const utils = __importStar(__webpack_require__(1));
+(function () {
+    const DOWNLOAD_BTN_ID = 'xiu-download-btn';
+    const STYLE_ELEMENT_ID = 'xiu-style-element';
+    main();
+    // observePageChange()
+    document.addEventListener('DOMSubtreeModified', onBodyChanged);
+    function main() {
+        if (!utils.isRepo())
+            return;
+        addDownloadBtn();
+        addDownload2FileList();
+    }
+    let tid = 0;
+    function onBodyChanged() {
+        clearTimeout(tid);
+        // @ts-ignore
+        tid = setTimeout(addDownloadBtn, 100);
+    }
+    function addDownloadBtn() {
+        let $navi = document.querySelector('.application-main .file-navigation');
+        if (!$navi)
+            return;
+        const downloadBtn = getDownloadBtn($navi);
+        if ($navi.contains(downloadBtn))
+            return;
+        $navi.appendChild(downloadBtn);
+    }
+    function getDownloadBtn($fileNavi) {
+        let downloadBtn = document.getElementById(DOWNLOAD_BTN_ID);
+        if (!downloadBtn) {
+            downloadBtn = document.createElement('a');
+            downloadBtn.id = DOWNLOAD_BTN_ID;
+        }
+        downloadBtn.className = 'btn d-none d-md-block ml-2';
+        downloadBtn.target = '_blank';
+        let url = '';
+        if (utils.isRepoRootDir()) {
+            const link = $fileNavi.querySelector('get-repo a[href$=".zip"]');
+            url = link.href;
+        }
+        else {
+            url = utils.getDownloadRedirectUrl(utils.getCurrentUrlPath());
+        }
+        downloadBtn.textContent = 'Download';
+        downloadBtn.href = url;
+        return downloadBtn;
+    }
+    function addDownload2FileList() {
+        if (document.getElementById(STYLE_ELEMENT_ID))
+            return;
+        const style = document.createElement('style');
+        style.id = STYLE_ELEMENT_ID;
+        const styleContent = `
+    .Box .Box-row > [role="gridcell"]:first-child:after {
+      position: absolute;
+      left: 20px;
+      top: 10px;
+      opacity: 0.6;
+      pointer-events: none;
+      content: '↓';
+      font-size: 0.8em;
+    }
+
+    .Box .Box-row > [role="gridcell"]:first-child > svg {
+      cursor: pointer;
+    }
+    `;
+        style.textContent = styleContent;
+        document.head.appendChild(style);
+        addEvent2FileIcon();
+    }
+    function addEvent2FileIcon() {
+        document.documentElement.addEventListener('click', (e) => {
+            var _a, _b, _c, _d;
+            // @ts-ignore
+            const target = (e.target && e.target.ownerSVGElement || e.target);
+            if (!target || (target.tagName || '').toLowerCase() !== 'svg')
+                return;
+            console.log(target);
+            const label = target.getAttribute('aria-label') || '';
+            if (!['Directory', 'File'].includes(label))
+                return;
+            const url = (_d = (_c = (_b = (_a = target.parentElement) === null || _a === void 0 ? void 0 : _a.nextElementSibling) === null || _b === void 0 ? void 0 : _b.querySelector) === null || _c === void 0 ? void 0 : _c.call(_b, 'a')) === null || _d === void 0 ? void 0 : _d.href;
+            if (!url)
+                return;
+            utils.openLink(utils.getDownloadRedirectUrl(url));
+        });
+    }
+})();
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getDownloadRedirectUrl = exports.openLink = exports.getCurrentUrlPath = exports.getRawBtn = exports.getUrlTextResponse = exports.isTextBasedSinglePage = exports.isRepoRootDir = exports.isPrivateRepo = exports.isRepo = exports.isGist = void 0;
 /**
  * is gist website
  */
@@ -187,143 +305,10 @@ function openLink(url) {
     link.click();
 }
 exports.openLink = openLink;
-
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const utils = __importStar(__webpack_require__(0));
-const utils_1 = __webpack_require__(0);
-(function () {
-    const DOWNLOAD_BTN_ID = 'xiu-download-btn';
-    main();
-    observePageChange();
-    function main() {
-        if (!utils.isRepo())
-            return;
-        addDownloadBtn();
-        addCopyTextBtn();
-    }
-    function observePageChange() {
-        // Select the node that will be observed for mutations
-        let targetNode;
-        if (utils.isGist()) {
-            targetNode = document.querySelector('#gist-pjax-container');
-        }
-        else {
-            // to deal with octree, it append elements as siblings of #js-repo-pjax-container 
-            //   which is inside of child of .application-main
-            targetNode = document.querySelector('#js-repo-pjax-container');
-        }
-        if (!targetNode)
-            return;
-        let tid = 0;
-        // Callback function to execute when mutations are observed
-        const callback = function (mutationsList) {
-            clearTimeout(tid);
-            // if download button exists, and textContent just been changed
-            //    e.g. translated by browser
-            if (mutationsList.some(mutation => {
-                if (mutation.type === 'childList' &&
-                    mutation.target.id === DOWNLOAD_BTN_ID &&
-                    mutation.target.textContent !== 'Download')
-                    return true;
-            }))
-                return;
-            tid = setTimeout(main, 200);
-        };
-        // Create an observer instance linked to the callback function
-        const observer = new MutationObserver(callback);
-        // Start observing the target node for configured mutations
-        observer.observe(targetNode, { childList: true, subtree: true });
-    }
-    function addDownloadBtn() {
-        let $navi = document.querySelector('.repository-content .file-navigation');
-        if ($navi) {
-            const downloadBtn = getDownloadBtn($navi);
-            if ($navi.contains(downloadBtn))
-                return;
-            $navi.appendChild(downloadBtn);
-            return;
-        }
-        const moreBtn = document.querySelector('#blob-more-options-details');
-        if (!moreBtn)
-            return;
-        $navi = moreBtn.parentElement;
-        const downloadBtn = getDownloadBtn($navi);
-        if ($navi.contains(downloadBtn))
-            return;
-        moreBtn.insertAdjacentElement('afterend', downloadBtn);
-    }
-    function getDownloadBtn($fileNavi) {
-        let downloadBtn = document.getElementById(DOWNLOAD_BTN_ID);
-        if (!downloadBtn) {
-            downloadBtn = document.createElement('a');
-            downloadBtn.id = DOWNLOAD_BTN_ID;
-        }
-        downloadBtn.className = 'btn d-none d-md-block ml-2';
-        downloadBtn.target = '_blank';
-        let url = '';
-        if (utils.isRepoRootDir()) {
-            const link = $fileNavi.querySelector('get-repo a[href$=".zip"]');
-            url = link.href;
-        }
-        else {
-            url = `https://downgit.evecalm.com/#/home?url=${encodeURIComponent(utils.getCurrentUrlPath())}`;
-        }
-        downloadBtn.textContent = 'Download';
-        downloadBtn.href = url;
-        return downloadBtn;
-    }
-    function addCopyTextBtn() {
-        if (!utils.isTextBasedSinglePage() || document.getElementById('xiu-copy-btn')) {
-            return;
-        }
-        const rawBtn = utils_1.getRawBtn();
-        // <a href="/Kyome22/IronKeyboard/raw/master/Keyboard/Line1.swift" id="raw-url" role="button" class="btn btn-sm BtnGroup-item ">Raw</a>
-        const copyBtn = document.createElement('a');
-        copyBtn.setAttribute('role', 'button');
-        copyBtn.className = 'btn btn-sm BtnGroup-item';
-        copyBtn.href = '#';
-        copyBtn.id = 'xiu-copy-btn';
-        copyBtn.textContent = 'Copy';
-        copyBtn.onclick = async (e) => {
-            e.preventDefault();
-            try {
-                const text = await utils.getUrlTextResponse(rawBtn.href);
-                // @ts-ignore
-                GM_setClipboard(text);
-            }
-            catch (error) {
-                console.warn(error);
-            }
-        };
-        rawBtn.insertAdjacentElement('beforebegin', copyBtn);
-    }
-})();
+function getDownloadRedirectUrl(url) {
+    return `https://downgit.evecalm.com/#/home?url=${encodeURIComponent(url)}`;
+}
+exports.getDownloadRedirectUrl = getDownloadRedirectUrl;
 
 
 /***/ })

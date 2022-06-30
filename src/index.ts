@@ -1,65 +1,32 @@
 import * as utils from './utils'
-import { getRawBtn } from './utils'
+
 (function () {
   const DOWNLOAD_BTN_ID = 'xiu-download-btn'
+  const STYLE_ELEMENT_ID = 'xiu-style-element'
   main()
-  observePageChange()
+  // observePageChange()
+  document.addEventListener('DOMSubtreeModified', onBodyChanged)
 
 
   function main() {
     if (!utils.isRepo()) return
     addDownloadBtn()
-    addCopyTextBtn()
+    addDownload2FileList()
   }
 
-  function observePageChange() {
-    // Select the node that will be observed for mutations
-    let targetNode: HTMLElement | null
-    if (utils.isGist()) {
-      targetNode = document.querySelector('#gist-pjax-container')
-    } else {
-      // to deal with octree, it append elements as siblings of #js-repo-pjax-container 
-      //   which is inside of child of .application-main
-      targetNode = document.querySelector('#js-repo-pjax-container')
-    }
-    if (!targetNode) return
-    let tid: any = 0
-    // Callback function to execute when mutations are observed
-    const callback = function(mutationsList: MutationRecord[]) {
-      clearTimeout(tid)
-      // if download button exists, and textContent just been changed
-      //    e.g. translated by browser
-      if (mutationsList.some(mutation => {
-        if (mutation.type === 'childList' && 
-          (mutation.target as HTMLElement).id === DOWNLOAD_BTN_ID &&
-          mutation.target.textContent !== 'Download'
-          ) return true
-      })) return
-
-      tid = setTimeout(main, 200)
-    }
-  
-    // Create an observer instance linked to the callback function
-    const observer = new MutationObserver(callback)
-  
-    // Start observing the target node for configured mutations
-    observer.observe(targetNode, { childList: true, subtree: true })    
+  let tid = 0
+  function onBodyChanged() {
+    clearTimeout(tid)
+    // @ts-ignore
+    tid = setTimeout(addDownloadBtn, 100);
   }
 
   function addDownloadBtn() {
-    let $navi = document.querySelector('.repository-content .file-navigation') as HTMLElement
-    if ($navi) {
-      const downloadBtn = getDownloadBtn($navi)
-      if ($navi.contains(downloadBtn)) return
-      $navi.appendChild(downloadBtn)
-      return
-    }
-    const moreBtn = document.querySelector('#blob-more-options-details')
-    if (!moreBtn) return
-    $navi = moreBtn.parentElement as HTMLElement
+    let $navi = document.querySelector('.application-main .file-navigation') as HTMLElement
+    if (!$navi) return
     const downloadBtn = getDownloadBtn($navi)
     if ($navi.contains(downloadBtn)) return
-    moreBtn.insertAdjacentElement('afterend', downloadBtn)
+    $navi.appendChild(downloadBtn)
   }
 
   function getDownloadBtn($fileNavi: HTMLElement) {
@@ -75,36 +42,49 @@ import { getRawBtn } from './utils'
       const link = $fileNavi.querySelector('get-repo a[href$=".zip"]') as HTMLAnchorElement
       url = link.href
     } else {
-      url = `https://downgit.evecalm.com/#/home?url=${encodeURIComponent(utils.getCurrentUrlPath())}`
+      url = utils.getDownloadRedirectUrl(utils.getCurrentUrlPath())
     }
     downloadBtn.textContent = 'Download'
     downloadBtn.href = url
     return downloadBtn
   }
 
+  function addDownload2FileList() {
+    if (document.getElementById(STYLE_ELEMENT_ID)) return
+    const style = document.createElement('style')
+    style.id = STYLE_ELEMENT_ID
 
-  function addCopyTextBtn () {
-    if (!utils.isTextBasedSinglePage() || document.getElementById('xiu-copy-btn')) {
-      return
+    const styleContent = `
+    .Box .Box-row > [role="gridcell"]:first-child:after {
+      position: absolute;
+      left: 20px;
+      top: 10px;
+      opacity: 0.6;
+      pointer-events: none;
+      content: '↓';
+      font-size: 0.8em;
     }
-    const rawBtn = getRawBtn() as HTMLAnchorElement
-    // <a href="/Kyome22/IronKeyboard/raw/master/Keyboard/Line1.swift" id="raw-url" role="button" class="btn btn-sm BtnGroup-item ">Raw</a>
-    const copyBtn = document.createElement('a')
-    copyBtn.setAttribute('role', 'button')
-    copyBtn.className = 'btn btn-sm BtnGroup-item'
-    copyBtn.href = '#'
-    copyBtn.id = 'xiu-copy-btn'
-    copyBtn.textContent = 'Copy'
-    copyBtn.onclick = async (e) => {
-      e.preventDefault()
-      try {
-        const text = await utils.getUrlTextResponse(rawBtn.href)
-        // @ts-ignore
-        GM_setClipboard(text)
-      } catch (error) {
-        console.warn(error)
-      }
+
+    .Box .Box-row > [role="gridcell"]:first-child > svg {
+      cursor: pointer;
     }
-    rawBtn.insertAdjacentElement('beforebegin', copyBtn)
+    `
+    style.textContent = styleContent
+    document.head.appendChild(style)
+    addEvent2FileIcon()
+  }
+
+  function addEvent2FileIcon() {
+    document.documentElement.addEventListener('click', (e: MouseEvent) => {
+      // @ts-ignore
+      const target = (e.target && e.target.ownerSVGElement || e.target) as HTMLElement
+      if (!target || (target.tagName || '').toLowerCase() !== 'svg') return
+      console.log(target)
+      const label = target.getAttribute('aria-label') || ''
+      if (!['Directory', 'File'].includes(label)) return
+      const url = target.parentElement?.nextElementSibling?.querySelector?.('a')?.href
+      if (!url) return
+      utils.openLink(utils.getDownloadRedirectUrl(url))
+    })
   }
 })()
