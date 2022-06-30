@@ -8,8 +8,7 @@ If you have any issues with this script, please create an issue on [Github](http
 
 ## Features
 * **download github source code online**: allow you to download whole repo,  a sub-folder of a repo  or a single file online without `git clone` locally
-* **copy source code content by one click**: allow you to copy source code in repo's single file view
-* **seamless integration**: seamless integrated with Github, and works great with [octotree](https://github.com/ovity/octotree).
+* **seamless integration**: seamless integrated with Github(click file icon in file list to download), and works great with [octotree](https://github.com/ovity/octotree).
 
 ![Download Github screenshot](./screenshot.png)
 
@@ -50,8 +49,7 @@ This script use [Downgit](https://downgit.evecalm.com/)([sourcecode](https://git
 如果你使用中遇到任何问题, 欢迎在[Github](https://github.com/oe/download-git-userscript/issues) 上提交 issue
 ## 功能特性
 * **在线下载Github仓库源码**: 你可以在线下载整个仓库、仓库的某个文件夹、单个文件的代码, 无需在机器上使用`git clone`命令下载完整仓库
-* **一键复制源代码**: 在浏览单个文件时, 可以快速一键复制源码
-* **无缝集成**: 与 GitHub 无缝集成, 看起来就像是原生功能, 与 Github 增强扩展 [octotree](https://github.com/ovity/octotree) 也能无缝配合
+* **无缝集成**: 与 GitHub 无缝集成(点击文件列表左侧图标即可直接下载), 看起来就像是原生功能, 与 Github 增强扩展 [octotree](https://github.com/ovity/octotree) 也能无缝配合
 
 
 ![Download Github screenshot](./screenshot.png)
