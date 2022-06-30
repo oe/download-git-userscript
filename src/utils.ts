@@ -68,12 +68,14 @@ export function openLink(url: string){
 }
 
 export function getGithubDownloadUrl(url: string, isFile?: boolean) {
-  try {
-    const u = new URL(url)
-    let paths = u.pathname.split('/')
-    paths[3] = 'raw'
-    u.pathname = paths.join('/')
-    return u.href
-  } catch (error) {}
+  if (isFile) {
+    try {
+      const u = new URL(url)
+      let paths = u.pathname.split('/')
+      paths[3] = 'raw'
+      u.pathname = paths.join('/')
+      return u.href
+    } catch (error) {}
+  }
   return `https://downgit.evecalm.com/#/home?url=${encodeURIComponent(url)}`
 }

@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name Download github repo sub-folder
-// @version 0.5.0
+// @version 0.5.1
 // @author Saiya
 // @description download github sub-folder via one click, copy the single file's source code easily
 // @supportURL https://github.com/oe/download-git-userscript/issues
@@ -311,14 +311,16 @@ function openLink(url) {
 }
 exports.openLink = openLink;
 function getGithubDownloadUrl(url, isFile) {
-    try {
-        const u = new URL(url);
-        let paths = u.pathname.split('/');
-        paths[3] = 'raw';
-        u.pathname = paths.join('/');
-        return u.href;
+    if (isFile) {
+        try {
+            const u = new URL(url);
+            let paths = u.pathname.split('/');
+            paths[3] = 'raw';
+            u.pathname = paths.join('/');
+            return u.href;
+        }
+        catch (error) { }
     }
-    catch (error) { }
     return `https://downgit.evecalm.com/#/home?url=${encodeURIComponent(url)}`;
 }
 exports.getGithubDownloadUrl = getGithubDownloadUrl;

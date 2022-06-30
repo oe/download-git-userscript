@@ -1,6 +1,6 @@
 {
   "name": "download-git-userscript",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --config-name main --host 127.0.0.1 --watch-poll",
     "lint": "eslint .",
