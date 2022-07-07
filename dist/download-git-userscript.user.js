@@ -213,7 +213,6 @@ const utils = __importStar(__webpack_require__(1));
             const target = (e.target && e.target.ownerSVGElement || e.target);
             if (!target || (target.tagName || '').toLowerCase() !== 'svg')
                 return;
-            console.log(target);
             const label = target.getAttribute('aria-label') || '';
             if (!['Directory', 'File'].includes(label))
                 return;

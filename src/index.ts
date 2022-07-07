@@ -83,7 +83,6 @@ import * as utils from './utils'
       // @ts-ignore
       const target = (e.target && e.target.ownerSVGElement || e.target) as HTMLElement
       if (!target || (target.tagName || '').toLowerCase() !== 'svg') return
-      console.log(target)
       const label = target.getAttribute('aria-label') || ''
       if (!['Directory', 'File'].includes(label)) return
       const url = target.parentElement?.nextElementSibling?.querySelector?.('a')?.href
