@@ -1,21 +1,21 @@
 // ==UserScript==
-// @name Download github repo sub-folder
-// @version 0.5.1
-// @author Saiya
-// @description download github sub-folder via one click, copy the single file's source code easily
-// @supportURL https://github.com/oe/download-git-userscript/issues
-// @match https://github.com/*
-// @match https://gist.github.com/*
-// @namespace https://app.evecalm.com
-// @name:zh-CN 在线下载Github仓库文件夹
+// @name              Download github repo sub-folder
+// @version           0.5.1
+// @author            Saiya
+// @description       download github sub-folder via one click, copy the single file's source code easily
+// @supportURL        https://github.com/oe/download-git-userscript/issues
+// @match             https://github.com/*
+// @match             https://gist.github.com/*
+// @namespace         https://app.evecalm.com
+// @name:zh-CN        在线下载Github仓库文件夹
 // @description:zh-CN 无需克隆GitHub仓库, 一键在线下载 Github仓库子文件夹; 同时还能在源码详情页一键复制源码
-// @homepageURL https://github.com/oe/download-git-userscript
-// @licence MIT
-// @icon https://github.githubassets.com/pinned-octocat.svg
-// @connect cdn.jsdelivr.net
-// @grant GM_setClipboard
-// @grant GM_xmlhttpRequest
-// @noframes 
+// @homepageURL       https://github.com/oe/download-git-userscript
+// @licence           MIT
+// @icon              https://github.githubassets.com/pinned-octocat.svg
+// @connect           cdn.jsdelivr.net
+// @grant             GM_setClipboard
+// @grant             GM_xmlhttpRequest
+// @noframes          
 // ==/UserScript==
 
 /******/ (function(modules) { // webpackBootstrap
@@ -151,11 +151,15 @@ const utils = __importStar(__webpack_require__(1));
     }
     function addDownloadBtn() {
         let $navi = document.querySelector('.application-main .file-navigation');
+        const $childCount = $navi.childElementCount;
         if (!$navi) {
             $navi = document.getElementById('blob-more-options-details');
             if (!$navi)
                 return;
             $navi = $navi.parentElement;
+        }
+        if ($navi && $childCount < 4) {
+            $navi.className = 'file-navigation d-flex flex-items-start';
         }
         const downloadBtn = getDownloadBtn($navi);
         if ($navi.contains(downloadBtn))

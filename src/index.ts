@@ -23,10 +23,14 @@ import * as utils from './utils'
 
   function addDownloadBtn() {
     let $navi = document.querySelector('.application-main .file-navigation') as HTMLElement
+    const $childCount = $navi.childElementCount;
     if (!$navi) {
       $navi = document.getElementById('blob-more-options-details') as HTMLElement
       if (!$navi) return
       $navi = $navi.parentElement as HTMLElement
+    }
+    if ($navi && $childCount < 4) {
+      $navi.className = 'file-navigation d-flex flex-items-start';
     }
     const downloadBtn = getDownloadBtn($navi)
     if ($navi.contains(downloadBtn)) return
