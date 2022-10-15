@@ -3,10 +3,10 @@ import * as utils from './utils'
 (function () {
   const DOWNLOAD_BTN_ID = 'xiu-download-btn'
   const STYLE_ELEMENT_ID = 'xiu-style-element'
+  let tid = 0
   main()
   // observePageChange()
   document.addEventListener('DOMSubtreeModified', onBodyChanged)
-
 
   function main() {
     if (!utils.isRepo()) return
@@ -14,11 +14,10 @@ import * as utils from './utils'
     addDownload2FileList()
   }
 
-  let tid = 0
   function onBodyChanged() {
     clearTimeout(tid)
     // @ts-ignore
-    tid = setTimeout(addDownloadBtn, 100);
+    tid = setTimeout(main, 100);
   }
 
   function addDownloadBtn() {

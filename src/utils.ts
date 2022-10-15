@@ -6,7 +6,7 @@ export function isGist() {
 }
 
 export function isRepo() {
-  if (!document.querySelector('.repository-content')) return false
+  if (!document.querySelector('.repository-content, #js-repo-pjax-container')) return false
   const meta = document.querySelector('meta[name="selected-link"]') as HTMLMetaElement
   if (meta && meta.getAttribute('value') === 'repo_commits') return false
   if (document.querySelector('.js-navigation-container>.TimelineItem')) return false

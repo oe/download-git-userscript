@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name Download github repo sub-folder
-// @version 0.5.1
+// @version 0.5.2
 // @author Saiya
 // @description download github sub-folder via one click, copy the single file's source code easily
 // @supportURL https://github.com/oe/download-git-userscript/issues
@@ -134,6 +134,7 @@ const utils = __importStar(__webpack_require__(1));
 (function () {
     const DOWNLOAD_BTN_ID = 'xiu-download-btn';
     const STYLE_ELEMENT_ID = 'xiu-style-element';
+    let tid = 0;
     main();
     // observePageChange()
     document.addEventListener('DOMSubtreeModified', onBodyChanged);
@@ -143,11 +144,10 @@ const utils = __importStar(__webpack_require__(1));
         addDownloadBtn();
         addDownload2FileList();
     }
-    let tid = 0;
     function onBodyChanged() {
         clearTimeout(tid);
         // @ts-ignore
-        tid = setTimeout(addDownloadBtn, 100);
+        tid = setTimeout(main, 100);
     }
     function addDownloadBtn() {
         let $navi = document.querySelector('.application-main .file-navigation');
@@ -242,7 +242,7 @@ function isGist() {
 }
 exports.isGist = isGist;
 function isRepo() {
-    if (!document.querySelector('.repository-content'))
+    if (!document.querySelector('.repository-content, #js-repo-pjax-container'))
         return false;
     const meta = document.querySelector('meta[name="selected-link"]');
     if (meta && meta.getAttribute('value') === 'repo_commits')
