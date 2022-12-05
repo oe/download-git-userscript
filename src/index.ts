@@ -96,7 +96,6 @@ import * as utils from './utils'
 
   function addEvent2FileIcon() {
     document.documentElement.addEventListener('click', (e: MouseEvent) => {
-      debugger
       // @ts-ignore
       const target = (e.target && e.target.ownerSVGElement || e.target) as HTMLElement
       if (!target || (target.tagName || '').toLowerCase() !== 'svg') return
