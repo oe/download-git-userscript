@@ -153,8 +153,11 @@ const utils = __importStar(__webpack_require__(1));
         let $navi = document.querySelector('.application-main .file-navigation');
         if (!$navi) {
             $navi = document.getElementById('blob-more-options-details');
-            if (!$navi)
-                return;
+            if (!$navi) {
+                $navi = document.querySelector('[data-testid="tree-overflow-menu-anchor"]');
+                if (!$navi)
+                    return;
+            }
             $navi = $navi.parentElement;
         }
         const downloadBtn = getDownloadBtn($navi);
@@ -168,10 +171,11 @@ const utils = __importStar(__webpack_require__(1));
             downloadBtn = document.createElement('a');
             downloadBtn.id = DOWNLOAD_BTN_ID;
         }
-        downloadBtn.className = 'btn d-none d-md-block ml-2';
+        const isRoot = utils.isRepoRootDir();
+        downloadBtn.className = `btn d-none d-md-block ${isRoot ? 'ml-2' : ''}`;
         downloadBtn.target = '_blank';
         let url = '';
-        if (utils.isRepoRootDir()) {
+        if (isRoot) {
             const link = $fileNavi.querySelector('get-repo a[href$=".zip"]');
             url = link.href;
         }
@@ -188,6 +192,8 @@ const utils = __importStar(__webpack_require__(1));
         const style = document.createElement('style');
         style.id = STYLE_ELEMENT_ID;
         const styleContent = `
+    .react-directory-filename-column { position: relative; }
+    .react-directory-filename-column:after,
     .Box .Box-row > [role="gridcell"]:first-child:after {
       position: absolute;
       left: 20px;
@@ -196,6 +202,17 @@ const utils = __importStar(__webpack_require__(1));
       pointer-events: none;
       content: '↓';
       font-size: 0.8em;
+    }
+    .react-directory-filename-column svg {
+      cursor: pointer;
+    }
+    .react-directory-filename-column:after {
+      left: 4px;
+      top: 12px;
+      color: white;
+    }
+    [data-color-mode="light"] .react-directory-filename-column:after {
+      color: black;
     }
 
     .Box .Box-row > [role="gridcell"]:first-child > svg {
@@ -208,19 +225,32 @@ const utils = __importStar(__webpack_require__(1));
     }
     function addEvent2FileIcon() {
         document.documentElement.addEventListener('click', (e) => {
-            var _a, _b, _c, _d;
+            var _a, _b, _c, _d, _e, _f, _g, _h;
+            debugger;
             // @ts-ignore
             const target = (e.target && e.target.ownerSVGElement || e.target);
             if (!target || (target.tagName || '').toLowerCase() !== 'svg')
                 return;
             const label = target.getAttribute('aria-label') || '';
-            if (!['Directory', 'File'].includes(label))
+            let url = '';
+            let isFile = false;
+            if (['Directory', 'File'].includes(label)) {
+                url = (_d = (_c = (_b = (_a = target.parentElement) === null || _a === void 0 ? void 0 : _a.nextElementSibling) === null || _b === void 0 ? void 0 : _b.querySelector) === null || _c === void 0 ? void 0 : _c.call(_b, 'a')) === null || _d === void 0 ? void 0 : _d.href;
+                isFile = label === 'File';
+            }
+            else if ((_e = target.parentElement) === null || _e === void 0 ? void 0 : _e.classList.contains('react-directory-filename-column')) {
+                url = (_h = (_g = (_f = target.nextElementSibling) === null || _f === void 0 ? void 0 : _f.querySelector) === null || _g === void 0 ? void 0 : _g.call(_f, 'a')) === null || _h === void 0 ? void 0 : _h.href;
+                console.warn("url", url);
+                isFile = target.classList.contains('color-fg-muted');
+            }
+            else {
                 return;
-            const url = (_d = (_c = (_b = (_a = target.parentElement) === null || _a === void 0 ? void 0 : _a.nextElementSibling) === null || _b === void 0 ? void 0 : _b.querySelector) === null || _c === void 0 ? void 0 : _c.call(_b, 'a')) === null || _d === void 0 ? void 0 : _d.href;
+            }
             if (!url)
                 return;
-            const isFile = label === 'File';
             utils.openLink(utils.getGithubDownloadUrl(url, isFile));
+        }, {
+            capture: true,
         });
     }
 })();

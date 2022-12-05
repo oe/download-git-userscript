@@ -24,7 +24,10 @@ import * as utils from './utils'
     let $navi = document.querySelector('.application-main .file-navigation') as HTMLElement
     if (!$navi) {
       $navi = document.getElementById('blob-more-options-details') as HTMLElement
-      if (!$navi) return
+      if (!$navi)  {
+        $navi = document.querySelector('[data-testid="tree-overflow-menu-anchor"]') as HTMLElement
+        if (!$navi) return
+      }
       $navi = $navi.parentElement as HTMLElement
     }
     const downloadBtn = getDownloadBtn($navi)
@@ -38,10 +41,11 @@ import * as utils from './utils'
       downloadBtn = document.createElement('a')
       downloadBtn.id = DOWNLOAD_BTN_ID
     }
-    downloadBtn.className = 'btn d-none d-md-block ml-2'
+    const isRoot = utils.isRepoRootDir()
+    downloadBtn.className = `btn d-none d-md-block ${isRoot ? 'ml-2' : ''}`
     downloadBtn.target = '_blank'
     let url = ''
-    if (utils.isRepoRootDir()) {
+    if (isRoot) {
       const link = $fileNavi.querySelector('get-repo a[href$=".zip"]') as HTMLAnchorElement
       url = link.href
     } else {
@@ -58,6 +62,8 @@ import * as utils from './utils'
     style.id = STYLE_ELEMENT_ID
 
     const styleContent = `
+    .react-directory-filename-column { position: relative; }
+    .react-directory-filename-column:after,
     .Box .Box-row > [role="gridcell"]:first-child:after {
       position: absolute;
       left: 20px;
@@ -66,6 +72,17 @@ import * as utils from './utils'
       pointer-events: none;
       content: '↓';
       font-size: 0.8em;
+    }
+    .react-directory-filename-column svg {
+      cursor: pointer;
+    }
+    .react-directory-filename-column:after {
+      left: 4px;
+      top: 12px;
+      color: white;
+    }
+    [data-color-mode="light"] .react-directory-filename-column:after {
+      color: black;
     }
 
     .Box .Box-row > [role="gridcell"]:first-child > svg {
@@ -79,15 +96,28 @@ import * as utils from './utils'
 
   function addEvent2FileIcon() {
     document.documentElement.addEventListener('click', (e: MouseEvent) => {
+      debugger
       // @ts-ignore
       const target = (e.target && e.target.ownerSVGElement || e.target) as HTMLElement
       if (!target || (target.tagName || '').toLowerCase() !== 'svg') return
       const label = target.getAttribute('aria-label') || ''
-      if (!['Directory', 'File'].includes(label)) return
-      const url = target.parentElement?.nextElementSibling?.querySelector?.('a')?.href
+      let url: string | undefined = ''
+      let isFile = false
+      
+      if (['Directory', 'File'].includes(label)) {
+        url = target.parentElement?.nextElementSibling?.querySelector?.('a')?.href
+        isFile = label === 'File'
+      } else if (target.parentElement?.classList.contains('react-directory-filename-column')) {
+        url = target.nextElementSibling?.querySelector?.('a')?.href
+        console.warn("url", url)
+        isFile = target.classList.contains('color-fg-muted')
+      } else {
+        return
+      }
       if (!url) return
-      const isFile = label === 'File'
       utils.openLink(utils.getGithubDownloadUrl(url, isFile))
+    }, {
+      capture: true,
     })
   }
 })()

@@ -87,7 +87,7 @@ Chrome 用户推荐安装浏览器扩展: [Tampermonkey](https://chrome.google.
 
 1. `yarn`
 2. `yarn dev`
-3. open <https://127.0.0.1/download-git-userscript.proxy.user.js> in browser(click  `Advanced` -> `proceed` if it shows a security warning ) to install the proxy script
+3. open <https://127.0.0.1:8080/download-git-userscript.proxy.user.js> in browser(click  `Advanced` -> `proceed` if it shows a security warning ) to install the proxy script
 4. dev code, reload github.com webpage after userscript changed
 
 
