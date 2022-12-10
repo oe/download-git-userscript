@@ -202,9 +202,11 @@ const utils = __importStar(__webpack_require__(1));
       pointer-events: none;
       content: '↓';
       font-size: 0.8em;
+      z-index: 11;
     }
     .react-directory-filename-column svg {
       cursor: pointer;
+      z-index: 10;
     }
     .react-directory-filename-column:after {
       left: 4px;
@@ -213,6 +215,19 @@ const utils = __importStar(__webpack_require__(1));
     }
     [data-color-mode="light"] .react-directory-filename-column:after {
       color: black;
+    }
+    @media (prefers-color-scheme: light) {
+      [data-color-mode=auto][data-light-theme*=light] .react-directory-filename-column:after {
+        color: black;
+      }
+    }
+
+    /** hide download icon on mobile */
+    @media (max-width: 500px) {
+      .Box .Box-row > [role="gridcell"]:first-child:after,
+      .react-directory-filename-column:after {
+        display: none
+      }
     }
 
     .Box .Box-row > [role="gridcell"]:first-child > svg {
@@ -226,7 +241,6 @@ const utils = __importStar(__webpack_require__(1));
     function addEvent2FileIcon() {
         document.documentElement.addEventListener('click', (e) => {
             var _a, _b, _c, _d, _e, _f, _g, _h;
-            debugger;
             // @ts-ignore
             const target = (e.target && e.target.ownerSVGElement || e.target);
             if (!target || (target.tagName || '').toLowerCase() !== 'svg')

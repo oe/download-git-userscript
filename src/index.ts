@@ -72,9 +72,11 @@ import * as utils from './utils'
       pointer-events: none;
       content: '↓';
       font-size: 0.8em;
+      z-index: 11;
     }
     .react-directory-filename-column svg {
       cursor: pointer;
+      z-index: 10;
     }
     .react-directory-filename-column:after {
       left: 4px;
@@ -83,6 +85,19 @@ import * as utils from './utils'
     }
     [data-color-mode="light"] .react-directory-filename-column:after {
       color: black;
+    }
+    @media (prefers-color-scheme: light) {
+      [data-color-mode=auto][data-light-theme*=light] .react-directory-filename-column:after {
+        color: black;
+      }
+    }
+
+    /** hide download icon on mobile */
+    @media (max-width: 500px) {
+      .Box .Box-row > [role="gridcell"]:first-child:after,
+      .react-directory-filename-column:after {
+        display: none
+      }
     }
 
     .Box .Box-row > [role="gridcell"]:first-child > svg {
