@@ -1,5 +1,5 @@
 const path = require('path')
-const WebpackUserscript = require('webpack-userscript')
+const { UserscriptPlugin } = require('webpack-userscript')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const pkg = require('./package.json')
 
@@ -43,30 +43,33 @@ module.exports = {
     minimize: false
   },
   devServer: {
-    https: enableHTTPS,
+    server: {
+      type: enableHTTPS ? 'https' : 'http',
+    },
+    client: {
+      overlay: false,
+      progress: false,
+    },
+    static: false,
+    webSocketServer: false,
     port: PORT,
-    writeToDisk: true,
-    contentBase: outputPath,
     hot: false,
-    inline: false,
+    magicHtml: true,
     liveReload: false
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new WebpackUserscript({
+    new UserscriptPlugin({
       headers ({ name, version }) {
         return {
           name: 'Download github repo sub-folder',
-          version: version,
+          version: isDev ? `${version}-beta.${Date.now()}` : version,
           author: 'Saiya',
           namespace: 'https://app.evecalm.com',
           description:
             "download github sub-folder via one click, copy the single file's source code easily",
-          'name:zh-CN': '在线下载Github仓库文件夹',
-          'description:zh-CN':
-            '无需克隆GitHub仓库, 一键在线下载 Github仓库子文件夹; 同时还能在源码详情页一键复制源码',
           homepageURL: 'https://github.com/oe/download-git-userscript',
-          licence: 'MIT',
+          // licence: 'MIT',
           icon: 'https://github.githubassets.com/pinned-octocat.svg',
           supportURL: 'https://github.com/oe/download-git-userscript/issues',
           connect: ['cdn.jsdelivr.net'],
@@ -75,8 +78,15 @@ module.exports = {
           noframes: true
         };
       },
+      i18n: {
+        'zh-CN': {
+          name: '在线下载Github仓库文件夹',
+          description:
+            '无需克隆GitHub仓库, 一键在线下载 Github仓库子文件夹; 同时还能在源码详情页一键复制源码'
+        }
+      },
       proxyScript: {
-        baseUrl: 'file://' + encodeURI(outputPath),
+        baseURL: enableHTTPS ? `https://localhost:${PORT}` : `http://localhost:${PORT}`,
         enable: isDev
       },
       pretty: isDev

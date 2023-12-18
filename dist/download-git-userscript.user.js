@@ -1,118 +1,37 @@
 // ==UserScript==
 // @name Download github repo sub-folder
-// @version 0.6.0
-// @author Saiya
+// @name:zh-CN 在线下载Github仓库文件夹
 // @description download github sub-folder via one click, copy the single file's source code easily
+// @description:zh-CN 无需克隆GitHub仓库, 一键在线下载 Github仓库子文件夹; 同时还能在源码详情页一键复制源码
+// @version 0.7.0
+// @author Saiya
 // @supportURL https://github.com/oe/download-git-userscript/issues
 // @match https://github.com/*
 // @match https://gist.github.com/*
-// @namespace https://app.evecalm.com
-// @name:zh-CN 在线下载Github仓库文件夹
-// @description:zh-CN 无需克隆GitHub仓库, 一键在线下载 Github仓库子文件夹; 同时还能在源码详情页一键复制源码
-// @homepageURL https://github.com/oe/download-git-userscript
-// @licence MIT
-// @icon https://github.githubassets.com/pinned-octocat.svg
 // @connect cdn.jsdelivr.net
 // @grant GM_setClipboard
 // @grant GM_xmlhttpRequest
+// @homepageURL https://github.com/oe/download-git-userscript
+// @icon https://github.githubassets.com/pinned-octocat.svg
+// @namespace https://app.evecalm.com
 // @noframes 
 // ==/UserScript==
 
-/******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// define __esModule on exports
-/******/ 	__webpack_require__.r = function(exports) {
-/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 		}
-/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 	};
-/******/
-/******/ 	// create a fake namespace object
-/******/ 	// mode & 1: value is a module id, require it
-/******/ 	// mode & 2: merge all properties of value into the ns
-/******/ 	// mode & 4: return value when already ns object
-/******/ 	// mode & 8|1: behave like require
-/******/ 	__webpack_require__.t = function(value, mode) {
-/******/ 		if(mode & 1) value = __webpack_require__(value);
-/******/ 		if(mode & 8) return value;
-/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
-/******/ 		var ns = Object.create(null);
-/******/ 		__webpack_require__.r(ns);
-/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
-/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
-/******/ 		return ns;
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
-/******/ })
-/************************************************************************/
-/******/ ([
-/* 0 */
-/***/ (function(module, exports, __webpack_require__) {
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
 
-"use strict";
+/***/ 607:
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -129,13 +48,14 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-const utils = __importStar(__webpack_require__(1));
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const utils = __importStar(__webpack_require__(593));
 (function () {
     const DOWNLOAD_BTN_ID = 'xiu-download-btn';
     const STYLE_ELEMENT_ID = 'xiu-style-element';
     let tid = 0;
     main();
+    console.log('xiu-download: init');
     // observePageChange()
     document.addEventListener('DOMSubtreeModified', onBodyChanged);
     function main() {
@@ -150,9 +70,12 @@ const utils = __importStar(__webpack_require__(1));
         tid = setTimeout(main, 100);
     }
     function addDownloadBtn() {
-        let $navi = document.querySelector('.application-main .file-navigation');
-        if (!$navi) {
-            $navi = document.getElementById('blob-more-options-details');
+        let $navi = utils.isRepoRootDir() && document.querySelector('#branch-picker-repos-header-ref-selector');
+        if ($navi) {
+            $navi = $navi.parentElement.parentElement.nextElementSibling;
+        }
+        else {
+            $navi = document.querySelector('#StickyHeader .js-github-dev-new-tab-shortcut');
             if (!$navi) {
                 $navi = document.querySelector('[data-testid="tree-overflow-menu-anchor"]');
                 if (!$navi)
@@ -160,24 +83,34 @@ const utils = __importStar(__webpack_require__(1));
             }
             $navi = $navi.parentElement;
         }
-        const downloadBtn = getDownloadBtn($navi);
-        if ($navi.contains(downloadBtn))
+        if (!$navi)
+            return;
+        const downloadBtn = getDownloadBtn();
+        if (!downloadBtn || $navi.contains(downloadBtn))
             return;
         $navi.appendChild(downloadBtn);
     }
-    function getDownloadBtn($fileNavi) {
+    function getDownloadBtn() {
         let downloadBtn = document.getElementById(DOWNLOAD_BTN_ID);
         if (!downloadBtn) {
             downloadBtn = document.createElement('a');
             downloadBtn.id = DOWNLOAD_BTN_ID;
         }
         const isRoot = utils.isRepoRootDir();
-        downloadBtn.className = `btn d-none d-md-block ${isRoot ? 'ml-2' : ''}`;
+        downloadBtn.className = `btn d-none d-md-block ${isRoot ? 'ml-0' : ''}`;
         downloadBtn.target = '_blank';
         let url = '';
         if (isRoot) {
-            const link = $fileNavi.querySelector('get-repo a[href$=".zip"]');
-            url = link.href;
+            try {
+                // @ts-ignore
+                const repoInfo = JSON.parse(document.querySelector('[partial-name="repos-overview"] [data-target="react-partial.embeddedData"]').innerText);
+                const zipUrl = repoInfo.props.initialPayload.overview.codeButton.local.platformInfo.zipballUrl;
+                url = new URL(zipUrl, location.href).href;
+            }
+            catch (error) {
+                console.warn('unable to get zip url', error);
+                return;
+            }
         }
         else {
             url = utils.getGithubDownloadUrl(utils.getCurrentUrlPath());
@@ -193,7 +126,8 @@ const utils = __importStar(__webpack_require__(1));
         style.id = STYLE_ELEMENT_ID;
         const styleContent = `
     .react-directory-filename-column { position: relative; }
-    .react-directory-filename-column:after,
+    .react-directory-filename-column:has(a[aria-label*="File"]):after,
+    .react-directory-filename-column:has(a[aria-label*="Directory"]):after,
     .Box .Box-row > [role="gridcell"]:first-child:after {
       position: absolute;
       left: 20px;
@@ -204,15 +138,15 @@ const utils = __importStar(__webpack_require__(1));
       font-size: 0.8em;
       z-index: 11;
     }
-    .react-directory-filename-column svg {
-      cursor: pointer;
-      z-index: 10;
-    }
-    .react-directory-filename-column:after {
+
+    .react-directory-filename-column:has(a[aria-label*="File"]):after,
+    .react-directory-filename-column:has(a[aria-label*="Directory"]):after{
       left: 4px;
       top: 12px;
       color: white;
     }
+
+
     [data-color-mode="light"] .react-directory-filename-column:after {
       color: black;
     }
@@ -222,15 +156,8 @@ const utils = __importStar(__webpack_require__(1));
       }
     }
 
-    /** hide download icon on mobile */
-    @media (max-width: 500px) {
-      .Box .Box-row > [role="gridcell"]:first-child:after,
-      .react-directory-filename-column:after {
-        display: none
-      }
-    }
-
-    .Box .Box-row > [role="gridcell"]:first-child > svg {
+    .react-directory-filename-column:has(a[aria-label*="File"]) svg,
+    .react-directory-filename-column:has(a[aria-label*="Directory"]) svg{
       cursor: pointer;
     }
     `;
@@ -240,7 +167,7 @@ const utils = __importStar(__webpack_require__(1));
     }
     function addEvent2FileIcon() {
         document.documentElement.addEventListener('click', (e) => {
-            var _a, _b, _c, _d, _e, _f, _g, _h;
+            var _a, _b, _c, _d, _e, _f, _g;
             // @ts-ignore
             const target = (e.target && e.target.ownerSVGElement || e.target);
             if (!target || (target.tagName || '').toLowerCase() !== 'svg')
@@ -253,7 +180,13 @@ const utils = __importStar(__webpack_require__(1));
                 isFile = label === 'File';
             }
             else if ((_e = target.parentElement) === null || _e === void 0 ? void 0 : _e.classList.contains('react-directory-filename-column')) {
-                url = (_h = (_g = (_f = target.nextElementSibling) === null || _f === void 0 ? void 0 : _f.querySelector) === null || _g === void 0 ? void 0 : _g.call(_f, 'a')) === null || _h === void 0 ? void 0 : _h.href;
+                const anchor = (_g = (_f = target.nextElementSibling) === null || _f === void 0 ? void 0 : _f.querySelector) === null || _g === void 0 ? void 0 : _g.call(_f, 'a');
+                if (!anchor)
+                    return;
+                const label = anchor.getAttribute('aria-label') || '';
+                if (!label.includes('Directory') && !label.includes('File'))
+                    return;
+                url = anchor.href;
                 console.warn("url", url);
                 isFile = target.classList.contains('color-fg-muted');
             }
@@ -265,18 +198,19 @@ const utils = __importStar(__webpack_require__(1));
             utils.openLink(utils.getGithubDownloadUrl(url, isFile));
         }, {
             capture: true,
+            passive: true,
         });
     }
 })();
 
 
 /***/ }),
-/* 1 */
-/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
+/***/ 593:
+/***/ ((__unused_webpack_module, exports) => {
 
-Object.defineProperty(exports, "__esModule", { value: true });
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getGithubDownloadUrl = exports.openLink = exports.getCurrentUrlPath = exports.getRawBtn = exports.getUrlTextResponse = exports.isTextBasedSinglePage = exports.isRepoRootDir = exports.isPrivateRepo = exports.isRepo = exports.isGist = void 0;
 /**
  * is gist website
@@ -302,7 +236,7 @@ function isPrivateRepo() {
 }
 exports.isPrivateRepo = isPrivateRepo;
 function isRepoRootDir() {
-    return !!document.querySelector('.repository-content  get-repo');
+    return !!document.querySelector('.repository-content  [partial-name="repos-overview"]');
 }
 exports.isRepoRootDir = isRepoRootDir;
 function isTextBasedSinglePage() {
@@ -370,4 +304,39 @@ exports.getGithubDownloadUrl = getGithubDownloadUrl;
 
 
 /***/ })
-/******/ ]);
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __webpack_require__(607);
+/******/ 	
+/******/ })()
+;

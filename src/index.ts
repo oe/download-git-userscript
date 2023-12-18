@@ -5,6 +5,8 @@ import * as utils from './utils'
   const STYLE_ELEMENT_ID = 'xiu-style-element'
   let tid = 0
   main()
+
+  console.log('xiu-download: init')
   // observePageChange()
   document.addEventListener('DOMSubtreeModified', onBodyChanged)
 
@@ -21,33 +23,43 @@ import * as utils from './utils'
   }
 
   function addDownloadBtn() {
-    let $navi = document.querySelector('.application-main .file-navigation') as HTMLElement
-    if (!$navi) {
-      $navi = document.getElementById('blob-more-options-details') as HTMLElement
+    let $navi = utils.isRepoRootDir() && document.querySelector('#branch-picker-repos-header-ref-selector') as HTMLElement
+    if ($navi) {
+      $navi = $navi.parentElement!.parentElement!.nextElementSibling as HTMLElement
+    } else {
+      $navi = document.querySelector('#StickyHeader .js-github-dev-new-tab-shortcut') as HTMLElement
       if (!$navi)  {
         $navi = document.querySelector('[data-testid="tree-overflow-menu-anchor"]') as HTMLElement
         if (!$navi) return
       }
       $navi = $navi.parentElement as HTMLElement
     }
-    const downloadBtn = getDownloadBtn($navi)
-    if ($navi.contains(downloadBtn)) return
+    if (!$navi) return
+    const downloadBtn = getDownloadBtn()
+    if (!downloadBtn || $navi.contains(downloadBtn)) return
     $navi.appendChild(downloadBtn)
   }
 
-  function getDownloadBtn($fileNavi: HTMLElement) {
+  function getDownloadBtn() {
     let downloadBtn = document.getElementById(DOWNLOAD_BTN_ID) as HTMLAnchorElement | null
     if (!downloadBtn) {
       downloadBtn = document.createElement('a')
       downloadBtn.id = DOWNLOAD_BTN_ID
     }
     const isRoot = utils.isRepoRootDir()
-    downloadBtn.className = `btn d-none d-md-block ${isRoot ? 'ml-2' : ''}`
+    downloadBtn.className = `btn d-none d-md-block ${isRoot ? 'ml-0' : ''}`
     downloadBtn.target = '_blank'
     let url = ''
     if (isRoot) {
-      const link = $fileNavi.querySelector('get-repo a[href$=".zip"]') as HTMLAnchorElement
-      url = link.href
+      try {
+        // @ts-ignore
+        const repoInfo = JSON.parse(document.querySelector('[partial-name="repos-overview"] [data-target="react-partial.embeddedData"]')!.innerText)
+        const zipUrl = repoInfo.props.initialPayload.overview.codeButton.local.platformInfo.zipballUrl
+        url = new URL(zipUrl, location.href).href
+      } catch (error) {
+        console.warn('unable to get zip url', error)
+        return
+      }
     } else {
       url = utils.getGithubDownloadUrl(utils.getCurrentUrlPath())
     }
@@ -63,7 +75,8 @@ import * as utils from './utils'
 
     const styleContent = `
     .react-directory-filename-column { position: relative; }
-    .react-directory-filename-column:after,
+    .react-directory-filename-column:has(a[aria-label*="File"]):after,
+    .react-directory-filename-column:has(a[aria-label*="Directory"]):after,
     .Box .Box-row > [role="gridcell"]:first-child:after {
       position: absolute;
       left: 20px;
@@ -74,15 +87,15 @@ import * as utils from './utils'
       font-size: 0.8em;
       z-index: 11;
     }
-    .react-directory-filename-column svg {
-      cursor: pointer;
-      z-index: 10;
-    }
-    .react-directory-filename-column:after {
+
+    .react-directory-filename-column:has(a[aria-label*="File"]):after,
+    .react-directory-filename-column:has(a[aria-label*="Directory"]):after{
       left: 4px;
       top: 12px;
       color: white;
     }
+
+
     [data-color-mode="light"] .react-directory-filename-column:after {
       color: black;
     }
@@ -92,15 +105,8 @@ import * as utils from './utils'
       }
     }
 
-    /** hide download icon on mobile */
-    @media (max-width: 500px) {
-      .Box .Box-row > [role="gridcell"]:first-child:after,
-      .react-directory-filename-column:after {
-        display: none
-      }
-    }
-
-    .Box .Box-row > [role="gridcell"]:first-child > svg {
+    .react-directory-filename-column:has(a[aria-label*="File"]) svg,
+    .react-directory-filename-column:has(a[aria-label*="Directory"]) svg{
       cursor: pointer;
     }
     `
@@ -122,7 +128,11 @@ import * as utils from './utils'
         url = target.parentElement?.nextElementSibling?.querySelector?.('a')?.href
         isFile = label === 'File'
       } else if (target.parentElement?.classList.contains('react-directory-filename-column')) {
-        url = target.nextElementSibling?.querySelector?.('a')?.href
+        const anchor = target.nextElementSibling?.querySelector?.('a')
+        if (!anchor) return
+        const label = anchor.getAttribute('aria-label') || ''
+        if (!label.includes('Directory') && !label.includes('File')) return
+        url = anchor.href
         console.warn("url", url)
         isFile = target.classList.contains('color-fg-muted')
       } else {
@@ -132,6 +142,7 @@ import * as utils from './utils'
       utils.openLink(utils.getGithubDownloadUrl(url, isFile))
     }, {
       capture: true,
+      passive: true,
     })
   }
 })()

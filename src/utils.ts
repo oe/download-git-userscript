@@ -19,7 +19,7 @@ export function isPrivateRepo() {
 }
 
 export function isRepoRootDir() {
-  return !!document.querySelector('.repository-content  get-repo')
+  return !!document.querySelector('.repository-content  [partial-name="repos-overview"]')
 }
 
 export function isTextBasedSinglePage() {
