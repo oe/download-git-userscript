@@ -55,7 +55,6 @@ const utils = __importStar(__webpack_require__(593));
     const STYLE_ELEMENT_ID = 'xiu-style-element';
     let tid = 0;
     main();
-    console.log('xiu-download: init');
     // observePageChange()
     document.addEventListener('DOMSubtreeModified', onBodyChanged);
     function main() {

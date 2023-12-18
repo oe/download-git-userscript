@@ -5,8 +5,6 @@ import * as utils from './utils'
   const STYLE_ELEMENT_ID = 'xiu-style-element'
   let tid = 0
   main()
-
-  console.log('xiu-download: init')
   // observePageChange()
   document.addEventListener('DOMSubtreeModified', onBodyChanged)
 
