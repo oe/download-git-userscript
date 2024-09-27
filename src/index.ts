@@ -5,8 +5,10 @@ import * as utils from './utils'
   const STYLE_ELEMENT_ID = 'xiu-style-element'
   let tid = 0
   main()
-  // observePageChange()
-  document.addEventListener('DOMSubtreeModified', onBodyChanged)
+  
+  // observe body change
+  const observer = new MutationObserver(onBodyChanged);
+  observer.observe(document, { subtree: true, childList: true });
 
   function main() {
     if (!utils.isRepo()) return
@@ -15,6 +17,7 @@ import * as utils from './utils'
   }
 
   function onBodyChanged() {
+    // debounce, avoid frequent call
     clearTimeout(tid)
     // @ts-ignore
     tid = setTimeout(main, 100);

@@ -3,7 +3,7 @@
 // @name:zh-CN 在线下载Github仓库文件夹
 // @description download github sub-folder via one click, copy the single file's source code easily
 // @description:zh-CN 无需克隆GitHub仓库, 一键在线下载 Github仓库子文件夹; 同时还能在源码详情页一键复制源码
-// @version 0.7.1
+// @version 0.7.2
 // @author Saiya
 // @supportURL https://github.com/oe/download-git-userscript/issues
 // @match https://github.com/*
@@ -55,8 +55,9 @@ const utils = __importStar(__webpack_require__(593));
     const STYLE_ELEMENT_ID = 'xiu-style-element';
     let tid = 0;
     main();
-    // observePageChange()
-    document.addEventListener('DOMSubtreeModified', onBodyChanged);
+    // observe body change
+    const observer = new MutationObserver(onBodyChanged);
+    observer.observe(document, { subtree: true, childList: true });
     function main() {
         if (!utils.isRepo())
             return;
@@ -64,6 +65,7 @@ const utils = __importStar(__webpack_require__(593));
         addDownload2FileList();
     }
     function onBodyChanged() {
+        // debounce, avoid frequent call
         clearTimeout(tid);
         // @ts-ignore
         tid = setTimeout(main, 100);
